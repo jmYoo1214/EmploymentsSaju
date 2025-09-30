@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>세금 계산기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>🧮 세금 계산기</h1>
+        <p>다양한 세금을 쉽게 계산하고 비교해보세요</p>
+      </header>
+
+      <main>
+        <div class="calculator-section">
+          <div class="input-section">
+            <h2>계산 옵션</h2>
+
+            <div class="input-group">
+              <label for="taxType">세금 유형</label>
+              <select id="taxType">
+                <option value="income">소득세</option>
+                <option value="vat">부가가치세</option>
+                <option value="property">재산세</option>
+                <option value="gift">증여세</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="amount">금액</label>
+              <input
+                type="number"
+                id="amount"
+                placeholder="금액을 입력하세요"
+                min="0"
+              />
+            </div>
+
+            <div class="input-group" id="incomeOptions">
+              <label for="incomeType">소득 유형</label>
+              <select id="incomeType">
+                <option value="salary">급여소득</option>
+                <option value="business">사업소득</option>
+                <option value="interest">이자소득</option>
+                <option value="dividend">배당소득</option>
+              </select>
+            </div>
+
+            <div class="input-group" id="vatOptions" style="display: none">
+              <label for="vatType">부가가치세 유형</label>
+              <select id="vatType">
+                <option value="supply">공급가액</option>
+                <option value="total">부가세포함금액</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="deduction">공제액</label>
+              <input
+                type="number"
+                id="deduction"
+                placeholder="공제액을 입력하세요"
+                min="0"
+                value="0"
+              />
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h2>계산 결과</h2>
+            <div class="take-home-section">
+              <div class="take-home-item main-result">
+                <span>세금</span>
+                <span id="taxAmount">₩0</span>
+              </div>
+              <div class="take-home-item">
+                <span>세전 금액</span>
+                <span id="beforeTax">₩0</span>
+              </div>
+              <div class="take-home-item">
+                <span>세후 금액</span>
+                <span id="afterTax">₩0</span>
+              </div>
+            </div>
+
+            <div class="deduction-section">
+              <h3>세금 상세</h3>
+              <div class="deduction-item">
+                <span>과세표준</span>
+                <span id="taxableAmount">₩0</span>
+              </div>
+              <div class="deduction-item">
+                <span>세율</span>
+                <span id="taxRate">0%</span>
+              </div>
+              <div class="deduction-item">
+                <span>공제액</span>
+                <span id="deductionAmount">₩0</span>
+              </div>
+              <div class="deduction-item total-deduction">
+                <span>실제 세금</span>
+                <span id="actualTax">₩0</span>
+              </div>
+            </div>
+
+            <div class="summary-section">
+              <h3>요약</h3>
+              <div class="summary-item">
+                <span>세금 부담률</span>
+                <span id="taxBurden">0%</span>
+              </div>
+              <div class="summary-item">
+                <span>절세 효과</span>
+                <span id="taxSaving">₩0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <!-- Google AdSense 코드가 여기에 들어갑니다 -->
+              <div class="ad-placeholder">
+                <p>728x90 배너 광고</p>
+                <small>Google AdSense</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 팁: 정확한 계산을 위해 실제 소득과 공제 내역을 확인해주세요</p>
+      </footer>
+    </div>
+
+    <script src="tax-calculator.js"></script>
+  </body>
+</html>

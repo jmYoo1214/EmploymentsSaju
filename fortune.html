@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오늘의 운세</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>🔮 오늘의 운세</h1>
+        <p>사주와 운세로 오늘 하루를 미리 알아보세요</p>
+        <div id="gptStatus" class="gpt-status">GPT 상태 확인 중...</div>
+      </header>
+
+      <main>
+        <div class="calculator-section">
+          <div class="input-section">
+            <h2>사주 정보</h2>
+
+            <!-- 출생일 입력 -->
+            <div class="input-group">
+              <label for="birthDate">출생일</label>
+              <input type="date" id="birthDate" />
+            </div>
+
+            <!-- 양력/음력 선택 -->
+            <div class="input-group">
+              <label>📅 달력 구분</label>
+              <div class="button-group calendar-group">
+                <button
+                  type="button"
+                  class="option-button calendar-button active"
+                  data-value="solar"
+                  data-name="calendarType"
+                >
+                  <div class="button-icon">🌞</div>
+                  <div class="button-text">
+                    <span class="button-title">양력</span>
+                    <span class="button-subtitle">Solar Calendar</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  class="option-button calendar-button"
+                  data-value="lunar"
+                  data-name="calendarType"
+                >
+                  <div class="button-icon">🌙</div>
+                  <div class="button-text">
+                    <span class="button-title">음력</span>
+                    <span class="button-subtitle">Lunar Calendar</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- 출생시간 -->
+            <div class="input-group">
+              <label for="birthTime">출생시간</label>
+              <select id="birthTime">
+                <option value="">선택하세요</option>
+                <option value="0">자시 (23:30-01:29)</option>
+                <option value="1">축시 (01:30-03:29)</option>
+                <option value="2">인시 (03:30-05:29)</option>
+                <option value="3">묘시 (05:30-07:29)</option>
+                <option value="4">진시 (07:30-09:29)</option>
+                <option value="5">사시 (09:30-11:29)</option>
+                <option value="6">오시 (11:30-13:29)</option>
+                <option value="7">미시 (13:30-15:29)</option>
+                <option value="8">신시 (15:30-17:29)</option>
+                <option value="9">유시 (17:30-19:29)</option>
+                <option value="10">술시 (19:30-21:29)</option>
+                <option value="11">해시 (21:30-23:29)</option>
+              </select>
+            </div>
+
+            <!-- 성별 선택 -->
+            <div class="input-group">
+              <label>👤 성별</label>
+              <div class="button-group gender-group">
+                <button
+                  type="button"
+                  class="option-button gender-button"
+                  data-value="male"
+                  data-name="gender"
+                >
+                  <div class="button-icon">👨</div>
+                  <div class="button-text">
+                    <span class="button-title">남성</span>
+                    <span class="button-subtitle">Male</span>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  class="option-button gender-button"
+                  data-value="female"
+                  data-name="gender"
+                >
+                  <div class="button-icon">👩</div>
+                  <div class="button-text">
+                    <span class="button-title">여성</span>
+                    <span class="button-subtitle">Female</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <button id="calculateFortune" class="fortune-button">
+              <div class="button-content">
+                <div class="button-icon">🔮</div>
+                <div class="button-text">
+                  <span class="button-title">운세 보기</span>
+                  <span class="button-subtitle">Get Your Fortune</span>
+                </div>
+                <div class="button-arrow">→</div>
+              </div>
+            </button>
+          </div>
+
+          <div class="result-section">
+            <h2>오늘의 운세</h2>
+            <div
+              class="fortune-section"
+              id="fortuneResult"
+              style="display: none"
+            >
+              <div class="fortune-card main-fortune">
+                <h3>전체 운세</h3>
+                <div class="fortune-score" id="overallScore">★★★★☆</div>
+                <p id="overallFortune">
+                  오늘은 전반적으로 좋은 하루가 될 것 같습니다.
+                </p>
+              </div>
+
+              <div class="fortune-grid">
+                <div class="fortune-card">
+                  <h4>💼 직장운</h4>
+                  <div class="fortune-score" id="workScore">★★★★☆</div>
+                  <p id="workFortune">업무에서 좋은 결과를 얻을 수 있습니다.</p>
+                </div>
+
+                <div class="fortune-card">
+                  <h4>💰 재물운</h4>
+                  <div class="fortune-score" id="moneyScore">★★★☆☆</div>
+                  <p id="moneyFortune">재정 관리에 신경 쓰세요.</p>
+                </div>
+
+                <div class="fortune-card">
+                  <h4>❤️ 연애운</h4>
+                  <div class="fortune-score" id="loveScore">★★★★☆</div>
+                  <p id="loveFortune">새로운 만남의 기회가 있을 수 있습니다.</p>
+                </div>
+
+                <div class="fortune-card">
+                  <h4>🏥 건강운</h4>
+                  <div class="fortune-score" id="healthScore">★★★☆☆</div>
+                  <p id="healthFortune">충분한 휴식을 취하세요.</p>
+                </div>
+              </div>
+
+              <div class="fortune-advice">
+                <h3>💡 오늘의 조언</h3>
+                <p id="dailyAdvice">긍정적인 마음가짐으로 하루를 시작하세요.</p>
+              </div>
+
+              <div class="fortune-lucky">
+                <h3>🍀 행운의 요소</h3>
+                <div class="lucky-items">
+                  <div class="lucky-item">
+                    <span>행운의 색깔</span>
+                    <span id="luckyColor">파란색</span>
+                  </div>
+                  <div class="lucky-item">
+                    <span>행운의 숫자</span>
+                    <span id="luckyNumber">7</span>
+                  </div>
+                  <div class="lucky-item">
+                    <span>행운의 방향</span>
+                    <span id="luckyDirection">동쪽</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fortune-placeholder" id="fortunePlaceholder">
+              <div class="placeholder-content">
+                <div class="placeholder-icon">🔮</div>
+                <h3>운세를 확인해보세요</h3>
+                <p>사주 정보를 입력하고 운세 보기 버튼을 눌러주세요</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <!-- Google AdSense 코드가 여기에 들어갑니다 -->
+              <div class="ad-placeholder">
+                <p>728x90 배너 광고</p>
+                <small>Google AdSense</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 팁: 운세는 참고용이며, 긍정적인 마음가짐이 가장 중요합니다</p>
+      </footer>
+    </div>
+
+    <script src="fortune.js"></script>
+  </body>
+</html>
