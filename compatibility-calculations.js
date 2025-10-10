@@ -389,7 +389,7 @@ class CompatibilityCalculations {
     const ji1 = ganji1.dayJi;
     const ji2 = ganji2.dayJi;
     
-    if (hyengTable[ji1 + ji2] || hyengTable[ji2 + ji1]) {
+    if (hyeongTable[ji1 + ji2] || hyeongTable[ji2 + ji1]) {
       score -= 5;
     }
     
