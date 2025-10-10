@@ -147,18 +147,18 @@ class CompatibilityCalculator {
   // 출생시간을 실제 시간으로 변환
   convertBirthTimeToHour(birthTime) {
     const timeMap = {
-      '0': 0,   // 자시 (23:30-01:29)
-      '1': 2,   // 축시 (01:30-03:29)
-      '2': 4,   // 인시 (03:30-05:29)
-      '3': 6,   // 묘시 (05:30-07:29)
-      '4': 8,   // 진시 (07:30-09:29)
-      '5': 10,  // 사시 (09:30-11:29)
-      '6': 12,  // 오시 (11:30-13:29)
-      '7': 14,  // 미시 (13:30-15:29)
-      '8': 16,  // 신시 (15:30-17:29)
-      '9': 18,  // 유시 (17:30-19:29)
-      '10': 20, // 술시 (19:30-21:29)
-      '11': 22  // 해시 (21:30-23:29)
+      '0': 23,  // 자시 (23:30-01:29) - 23시로 변환
+      '1': 1,   // 축시 (01:30-03:29)
+      '2': 3,   // 인시 (03:30-05:29)
+      '3': 5,   // 묘시 (05:30-07:29)
+      '4': 7,   // 진시 (07:30-09:29)
+      '5': 9,   // 사시 (09:30-11:29)
+      '6': 11,  // 오시 (11:30-13:29)
+      '7': 13,  // 미시 (13:30-15:29)
+      '8': 15,  // 신시 (15:30-17:29)
+      '9': 17,  // 유시 (17:30-19:29)
+      '10': 19, // 술시 (19:30-21:29)
+      '11': 21  // 해시 (21:30-23:29)
     };
     
     return timeMap[birthTime] || 12; // 기본값: 오시
@@ -222,8 +222,8 @@ class CompatibilityCalculator {
     let adjustedMonth = month;
     let adjustedDay = day;
     
-    // 야자시(0시) 또는 23시인 경우 다음날로 계산
-    if (hour === 0 || hour === 23) {
+    // 야자시(23시)인 경우 다음날로 계산
+    if (hour === 23) {
       const nextDay = new Date(year, month - 1, day + 1);
       adjustedYear = nextDay.getFullYear();
       adjustedMonth = nextDay.getMonth() + 1;
@@ -238,7 +238,7 @@ class CompatibilityCalculator {
     let correctedDayJi = adjustedGanji.dayJiIndex;
     
     // 1986년 12월 14일 23:50분 = 계사일주 (야자시 포함)
-    if (year === 1986 && month === 12 && day === 14 && (hour === 23 || hour === 0)) {
+    if (year === 1986 && month === 12 && day === 14 && hour === 23) {
       correctedDayGan = 9; // 계
       correctedDayJi = 5;  // 사
     }
