@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>궁합보기</title>
+    <link rel="stylesheet" href="style.css" />
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4538397115317215"
+            crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>💕 궁합보기</h1>
+        <p>두 사람의 사주 정보로 궁합을 확인해보세요</p>
+      </header>
+
+      <main>
+        <!-- 입력 섹션 -->
+        <div class="compatibility-input-section">
+          <div class="person-inputs">
+            <!-- 첫 번째 사람 -->
+            <div class="person-card">
+              <div class="person-header">
+                <h3>👤 첫 번째 사람</h3>
+              </div>
+              <div class="input-group">
+                <label for="person1Name">이름</label>
+                <input type="text" id="person1Name" placeholder="이름을 입력하세요" />
+              </div>
+              <div class="input-group">
+                <label for="person1Gender">성별</label>
+                <select id="person1Gender">
+                  <option value="">성별 선택</option>
+                  <option value="male">남성</option>
+                  <option value="female">여성</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="person1Calendar">양력/음력</label>
+                <select id="person1Calendar">
+                  <option value="">선택하세요</option>
+                  <option value="solar">양력</option>
+                  <option value="lunar">음력</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="person1BirthDate">생년월일</label>
+                <input type="date" id="person1BirthDate" />
+              </div>
+              <div class="input-group">
+                <label for="person1BirthTime">출생시간</label>
+                <select id="person1BirthTime">
+                  <option value="">시간 선택</option>
+                  <option value="0">자시 (23:30-01:29)</option>
+                  <option value="1">축시 (01:30-03:29)</option>
+                  <option value="2">인시 (03:30-05:29)</option>
+                  <option value="3">묘시 (05:30-07:29)</option>
+                  <option value="4">진시 (07:30-09:29)</option>
+                  <option value="5">사시 (09:30-11:29)</option>
+                  <option value="6">오시 (11:30-13:29)</option>
+                  <option value="7">미시 (13:30-15:29)</option>
+                  <option value="8">신시 (15:30-17:29)</option>
+                  <option value="9">유시 (17:30-19:29)</option>
+                  <option value="10">술시 (19:30-21:29)</option>
+                  <option value="11">해시 (21:30-23:29)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 두 번째 사람 -->
+            <div class="person-card">
+              <div class="person-header">
+                <h3>👤 두 번째 사람</h3>
+              </div>
+              <div class="input-group">
+                <label for="person2Name">이름</label>
+                <input type="text" id="person2Name" placeholder="이름을 입력하세요" />
+              </div>
+              <div class="input-group">
+                <label for="person2Gender">성별</label>
+                <select id="person2Gender">
+                  <option value="">성별 선택</option>
+                  <option value="male">남성</option>
+                  <option value="female">여성</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="person2Calendar">양력/음력</label>
+                <select id="person2Calendar">
+                  <option value="">선택하세요</option>
+                  <option value="solar">양력</option>
+                  <option value="lunar">음력</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="person2BirthDate">생년월일</label>
+                <input type="date" id="person2BirthDate" />
+              </div>
+              <div class="input-group">
+                <label for="person2BirthTime">출생시간</label>
+                <select id="person2BirthTime">
+                  <option value="">시간 선택</option>
+                  <option value="0">자시 (23:30-01:29)</option>
+                  <option value="1">축시 (01:30-03:29)</option>
+                  <option value="2">인시 (03:30-05:29)</option>
+                  <option value="3">묘시 (05:30-07:29)</option>
+                  <option value="4">진시 (07:30-09:29)</option>
+                  <option value="5">사시 (09:30-11:29)</option>
+                  <option value="6">오시 (11:30-13:29)</option>
+                  <option value="7">미시 (13:30-15:29)</option>
+                  <option value="8">신시 (15:30-17:29)</option>
+                  <option value="9">유시 (17:30-19:29)</option>
+                  <option value="10">술시 (19:30-21:29)</option>
+                  <option value="11">해시 (21:30-23:29)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="calculate-button-container">
+            <button class="calculate-button" id="calculateButton">
+              <span class="button-icon">💕</span>
+              <span class="button-text">궁합 계산하기</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 결과 섹션 -->
+        <div class="compatibility-result-section" id="resultSection" style="display: none">
+          <div class="result-header">
+            <h2>💕 궁합 결과</h2>
+            <div class="couple-names" id="coupleNames"></div>
+          </div>
+
+          <div class="compatibility-scores">
+            <div class="score-card main-score">
+              <div class="score-icon">💖</div>
+              <div class="score-content">
+                <h3>전체 궁합</h3>
+                <div class="score-value" id="overallScore">0점</div>
+                <div class="score-description" id="overallDescription"></div>
+              </div>
+            </div>
+
+            <div class="score-grid">
+              <div class="score-card">
+                <div class="score-icon">❤️</div>
+                <div class="score-content">
+                  <h4>속궁합</h4>
+                  <div class="score-value" id="intimacyScore">0점</div>
+                </div>
+              </div>
+
+              <div class="score-card">
+                <div class="score-icon">🤝</div>
+                <div class="score-content">
+                  <h4>성격궁합</h4>
+                  <div class="score-value" id="personalityScore">0점</div>
+                </div>
+              </div>
+
+              <div class="score-card">
+                <div class="score-icon">💼</div>
+                <div class="score-content">
+                  <h4>운세궁합</h4>
+                  <div class="score-value" id="fortuneScore">0점</div>
+                </div>
+              </div>
+
+              <div class="score-card">
+                <div class="score-icon">🏠</div>
+                <div class="score-content">
+                  <h4>가정궁합</h4>
+                  <div class="score-value" id="familyScore">0점</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="compatibility-analysis">
+            <h3>📊 상세 분석</h3>
+            <div class="analysis-content" id="analysisContent"></div>
+          </div>
+
+          <div class="compatibility-advice">
+            <h3>💡 궁합 조언</h3>
+            <div class="advice-content" id="adviceContent"></div>
+          </div>
+
+          <div class="result-actions">
+            <button class="action-button secondary" id="shareButton">
+              <span class="button-icon">📤</span>
+              <span class="button-text">결과 공유하기</span>
+            </button>
+            <button class="action-button primary" id="calculateAgainButton">
+              <span class="button-icon">🔄</span>
+              <span class="button-text">다시 계산하기</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <!-- AdSense 광고 단위 -->
+              <ins class="adsbygoogle"
+                   style="display:block"
+                   data-ad-client="ca-pub-4538397115317215"
+                   data-ad-slot="YOUR_AD_SLOT_ID"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+              <script>
+                   (adsbygoogle = window.adsbygoogle || []).push({});
+              </script>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💕 정확한 궁합 분석을 위해 정확한 생년월일과 출생시간을 입력해주세요</p>
+        <p>Made with ❤️ for 직장인들</p>
+      </footer>
+    </div>
+
+    <script src="compatibility.js"></script>
+  </body>
+</html>
