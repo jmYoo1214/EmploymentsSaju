@@ -350,6 +350,7 @@ class LunchPicker {
   updateCategoryCardState(checkbox) {
     const card = checkbox.closest('.category-card');
     if (card) {
+      console.log(`Updating card state: ${checkbox.id} = ${checkbox.checked}`);
       if (checkbox.checked) {
         card.classList.add('selected');
       } else {
@@ -384,7 +385,8 @@ class LunchPicker {
 
     // 카테고리 체크박스 변경 시
     document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-      checkbox.addEventListener("change", () => {
+      checkbox.addEventListener("change", (e) => {
+        e.stopPropagation();
         this.updateCategoryCardState(checkbox);
         this.updatePickButton();
         this.updateCategoryCounts();
@@ -402,10 +404,14 @@ class LunchPicker {
     // 카테고리 카드 클릭 시
     document.querySelectorAll(".category-card").forEach((card) => {
       card.addEventListener("click", (e) => {
-        if (e.target.type !== "checkbox") {
-          const checkbox = card.querySelector('input[type="checkbox"]');
+        e.preventDefault();
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        if (checkbox) {
           checkbox.checked = !checkbox.checked;
-          checkbox.dispatchEvent(new Event("change"));
+          this.updateCategoryCardState(checkbox);
+          this.updatePickButton();
+          this.updateCategoryCounts();
+          this.updateStats();
         }
       });
     });
