@@ -1670,13 +1670,13 @@ footer {
   display: inline-block;
 }
 
-.category-card:has(input:checked) {
+.category-card.selected {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.4);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
-.category-card:has(input:checked)::before {
+.category-card.selected::before {
   content: "✓";
   position: absolute;
   top: 10px;

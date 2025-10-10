@@ -336,6 +336,26 @@ class LunchPicker {
     totalMenus = document.getElementById("totalMenus");
     selectedCategories = document.getElementById("selectedCategories");
     spinningDice = document.querySelector(".spinning-dice");
+    
+    // 초기 카테고리 카드 상태 설정
+    this.initializeCategoryCards();
+  }
+
+  initializeCategoryCards() {
+    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      this.updateCategoryCardState(checkbox);
+    });
+  }
+
+  updateCategoryCardState(checkbox) {
+    const card = checkbox.closest('.category-card');
+    if (card) {
+      if (checkbox.checked) {
+        card.classList.add('selected');
+      } else {
+        card.classList.remove('selected');
+      }
+    }
   }
 
   initializeEventListeners() {
@@ -365,6 +385,7 @@ class LunchPicker {
     // 카테고리 체크박스 변경 시
     document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
       checkbox.addEventListener("change", () => {
+        this.updateCategoryCardState(checkbox);
         this.updatePickButton();
         this.updateCategoryCounts();
         this.updateStats();
