@@ -7,7 +7,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 미들웨어
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://dendilstory.co.kr",
+      "https://www.dendilstory.co.kr",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
@@ -144,13 +153,22 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
   try {
     // 12지지 시간 변환
     const timeNames = [
-      "자시(23:30-01:29)", "축시(01:30-03:29)", "인시(03:30-05:29)", "묘시(05:30-07:29)",
-      "진시(07:30-09:29)", "사시(09:30-11:29)", "오시(11:30-13:29)", "미시(13:30-15:29)",
-      "신시(15:30-17:29)", "유시(17:30-19:29)", "술시(19:30-21:29)", "해시(21:30-23:29)"
+      "자시(23:30-01:29)",
+      "축시(01:30-03:29)",
+      "인시(03:30-05:29)",
+      "묘시(05:30-07:29)",
+      "진시(07:30-09:29)",
+      "사시(09:30-11:29)",
+      "오시(11:30-13:29)",
+      "미시(13:30-15:29)",
+      "신시(15:30-17:29)",
+      "유시(17:30-19:29)",
+      "술시(19:30-21:29)",
+      "해시(21:30-23:29)",
     ];
-    
+
     const timeName = timeNames[parseInt(birthTime)] || "알 수 없음";
-    
+
     const prompt = `당신은 전문적인 사주명리학자입니다. 다음 사주 정보를 바탕으로 오늘의 운세를 작성해주세요.
 
 **사주 정보:**
@@ -196,68 +214,72 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
 
     console.log("GPT API 호출 중...");
     const startTime = Date.now();
-    
+
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: "당신은 전문적인 사주명리학자이자 직장인 상담사입니다. 사주 정보를 바탕으로 실용적이고 도움이 되는 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요."
+          content:
+            "당신은 전문적인 사주명리학자이자 직장인 상담사입니다. 사주 정보를 바탕으로 실용적이고 도움이 되는 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요.",
         },
         {
           role: "user",
-          content: prompt
-        }
+          content: prompt,
+        },
       ],
       max_tokens: 1200,
       temperature: 0.8,
-      top_p: 0.9
+      top_p: 0.9,
     });
 
     const response = completion.choices[0].message.content;
     const endTime = Date.now();
-    
+
     console.log(`GPT API 응답 완료 (${endTime - startTime}ms)`);
-    console.log(`사용된 토큰: ${completion.usage?.total_tokens || 'N/A'}`);
+    console.log(`사용된 토큰: ${completion.usage?.total_tokens || "N/A"}`);
 
     // JSON 파싱 시도
     try {
       // 응답에서 JSON 부분만 추출
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       const jsonString = jsonMatch ? jsonMatch[0] : response;
-      
+
       const fortune = JSON.parse(jsonString);
-      
+
       // 점수 유효성 검사
-      const validateScore = (score) => Math.max(1, Math.min(5, parseInt(score) || 3));
-      
+      const validateScore = (score) =>
+        Math.max(1, Math.min(5, parseInt(score) || 3));
+
       return {
         overall: {
           score: validateScore(fortune.overall?.score),
-          text: fortune.overall?.text || "오늘은 새로운 기회가 찾아올 수 있는 날입니다."
+          text:
+            fortune.overall?.text ||
+            "오늘은 새로운 기회가 찾아올 수 있는 날입니다.",
         },
         work: {
           score: validateScore(fortune.work?.score),
-          text: fortune.work?.text || "업무에서 좋은 결과를 얻을 수 있습니다."
+          text: fortune.work?.text || "업무에서 좋은 결과를 얻을 수 있습니다.",
         },
         money: {
           score: validateScore(fortune.money?.score),
-          text: fortune.money?.text || "재정 관리에 신경 쓰세요."
+          text: fortune.money?.text || "재정 관리에 신경 쓰세요.",
         },
         love: {
           score: validateScore(fortune.love?.score),
-          text: fortune.love?.text || "새로운 만남의 기회가 있을 수 있습니다."
+          text: fortune.love?.text || "새로운 만남의 기회가 있을 수 있습니다.",
         },
         health: {
           score: validateScore(fortune.health?.score),
-          text: fortune.health?.text || "충분한 휴식을 취하세요."
+          text: fortune.health?.text || "충분한 휴식을 취하세요.",
         },
         advice: fortune.advice || "긍정적인 마음가짐으로 하루를 시작하세요.",
         lucky: {
           color: fortune.lucky?.color || "파란색",
           number: parseInt(fortune.lucky?.number) || 7,
-          direction: fortune.lucky?.direction || "동쪽"
-        }
+          direction: fortune.lucky?.direction || "동쪽",
+        },
       };
     } catch (parseError) {
       console.error("GPT 응답 파싱 오류:", parseError);
@@ -280,7 +302,9 @@ app.get("/api/status", (req, res) => {
   res.json({
     gptEnabled: !!openai,
     timestamp: new Date().toISOString(),
-    message: openai ? "GPT API 연동이 활성화되었습니다." : "GPT API 연동이 비활성화되었습니다."
+    message: openai
+      ? "GPT API 연동이 활성화되었습니다."
+      : "GPT API 연동이 비활성화되었습니다.",
   });
 });
 
