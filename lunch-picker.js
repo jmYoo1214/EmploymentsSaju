@@ -316,9 +316,14 @@ const clearHistoryButton = document.getElementById("clearHistoryButton");
 
 // 새로운 UI 요소들 (DOM 로드 후에 초기화)
 let portionSlider, portionIcon, portionText, totalMenus, selectedCategories, spinningDice;
+let historyCount, historyPageInfo, historyPagination, prevPageButton, nextPageButton, currentPageSpan, totalPagesSpan;
 
 // 뽑기 기록 저장
 let pickHistory = JSON.parse(localStorage.getItem("lunchPickHistory") || "[]");
+
+// 페이징 설정
+const ITEMS_PER_PAGE = 5;
+let currentPage = 1;
 
 // 점심 뽑기 클래스
 class LunchPicker {
@@ -336,6 +341,15 @@ class LunchPicker {
     totalMenus = document.getElementById("totalMenus");
     selectedCategories = document.getElementById("selectedCategories");
     spinningDice = document.querySelector(".spinning-dice");
+    
+    // 페이징 요소들 초기화
+    historyCount = document.getElementById("historyCount");
+    historyPageInfo = document.getElementById("historyPageInfo");
+    historyPagination = document.getElementById("historyPagination");
+    prevPageButton = document.getElementById("prevPageButton");
+    nextPageButton = document.getElementById("nextPageButton");
+    currentPageSpan = document.getElementById("currentPage");
+    totalPagesSpan = document.getElementById("totalPages");
     
     // 초기 카테고리 카드 상태 설정
     this.initializeCategoryCards();
@@ -382,6 +396,14 @@ class LunchPicker {
 
     // 기록 지우기 버튼
     clearHistoryButton.addEventListener("click", () => this.clearHistory());
+
+    // 페이징 버튼들
+    if (prevPageButton) {
+      prevPageButton.addEventListener("click", () => this.goToPreviousPage());
+    }
+    if (nextPageButton) {
+      nextPageButton.addEventListener("click", () => this.goToNextPage());
+    }
 
     // 카테고리 체크박스 변경 시
     document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
@@ -444,9 +466,9 @@ class LunchPicker {
 
     const value = parseInt(portionSlider.value);
     const portions = [
-      { size: "소", desc: "가벼운 식사", icon: "🥗" },
-      { size: "중", desc: "보통 식사", icon: "🍽️" },
-      { size: "대", desc: "든든한 식사", icon: "🍖" },
+      { size: "소", desc: "간단한 한 끼", icon: "🥗" },
+      { size: "중", desc: "적당한 식사", icon: "🍽️" },
+      { size: "대", desc: "푸짐한 식사", icon: "🍖" },
     ];
 
     const portion = portions[value];
@@ -658,13 +680,55 @@ class LunchPicker {
     }
 
     historySection.style.display = "block";
+    this.updateHistoryPagination();
+    this.renderCurrentPage();
+  }
 
-    historyList.innerHTML = pickHistory
+  updateHistoryPagination() {
+    const totalPages = Math.ceil(pickHistory.length / ITEMS_PER_PAGE);
+    
+    if (historyCount) {
+      historyCount.textContent = `총 ${pickHistory.length}개`;
+    }
+    
+    if (totalPagesSpan) {
+      totalPagesSpan.textContent = totalPages;
+    }
+    
+    if (historyPagination) {
+      historyPagination.style.display = totalPages > 1 ? "flex" : "none";
+    }
+    
+    this.updatePaginationButtons(totalPages);
+  }
+
+  updatePaginationButtons(totalPages) {
+    if (prevPageButton) {
+      prevPageButton.disabled = currentPage <= 1;
+    }
+    if (nextPageButton) {
+      nextPageButton.disabled = currentPage >= totalPages;
+    }
+    if (currentPageSpan) {
+      currentPageSpan.textContent = currentPage;
+    }
+  }
+
+  renderCurrentPage() {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const currentPageItems = pickHistory.slice(startIndex, endIndex);
+
+    historyList.innerHTML = currentPageItems
       .map((item, index) => {
         const date = new Date(item.timestamp);
         const timeString = date.toLocaleTimeString("ko-KR", {
           hour: "2-digit",
           minute: "2-digit",
+        });
+        const dateString = date.toLocaleDateString("ko-KR", {
+          month: "short",
+          day: "numeric",
         });
 
         return `
@@ -673,22 +737,35 @@ class LunchPicker {
             <div class="history-content">
               <div class="history-name">${item.menu}</div>
               <div class="history-details">
-                <span class="history-portion">${this.getPortionText(
-                  item.portion
-                )}</span>
+                <span class="history-portion">${this.getPortionText(item.portion)}</span>
                 <span class="history-calories">${item.calories}kcal</span>
-                <span class="history-time">${timeString}</span>
+                <span class="history-time">${dateString} ${timeString}</span>
               </div>
             </div>
-            <button class="history-pick-again" onclick="picker.pickSpecificMenu('${
-              item.menu
-            }', '${item.category}', '${item.portion}')">
+            <button class="history-pick-again" onclick="picker.pickSpecificMenu('${item.menu}', '${item.category}', '${item.portion}')">
               다시 뽑기
             </button>
           </div>
         `;
       })
       .join("");
+  }
+
+  goToPreviousPage() {
+    if (currentPage > 1) {
+      currentPage--;
+      this.renderCurrentPage();
+      this.updatePaginationButtons(Math.ceil(pickHistory.length / ITEMS_PER_PAGE));
+    }
+  }
+
+  goToNextPage() {
+    const totalPages = Math.ceil(pickHistory.length / ITEMS_PER_PAGE);
+    if (currentPage < totalPages) {
+      currentPage++;
+      this.renderCurrentPage();
+      this.updatePaginationButtons(totalPages);
+    }
   }
 
   pickSpecificMenu(menuName, category, portion) {
@@ -703,6 +780,7 @@ class LunchPicker {
   clearHistory() {
     if (confirm("뽑기 기록을 모두 지우시겠습니까?")) {
       pickHistory = [];
+      currentPage = 1;
       localStorage.removeItem("lunchPickHistory");
       this.loadHistory();
     }

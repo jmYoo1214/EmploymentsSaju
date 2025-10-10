@@ -98,9 +98,9 @@
                     <span class="slider-label" data-value="2">대</span>
                   </div>
                   <div class="slider-descriptions">
-                    <span class="slider-desc">가벼운 식사</span>
-                    <span class="slider-desc">보통 식사</span>
-                    <span class="slider-desc">든든한 식사</span>
+                    <span class="slider-desc">간단한 한 끼</span>
+                    <span class="slider-desc">적당한 식사</span>
+                    <span class="slider-desc">푸짐한 식사</span>
                   </div>
                 </div>
                 <div class="portion-display">
@@ -172,10 +172,32 @@
               <div class="history-subtitle">
                 최근에 뽑은 메뉴들을 확인해보세요
               </div>
+              <div class="history-stats">
+                <span class="history-count" id="historyCount">총 0개</span>
+                <span class="history-page-info" id="historyPageInfo">1 / 1 페이지</span>
+              </div>
             </div>
-            <div class="history-list" id="historyList">
-              <!-- 뽑기 기록이 여기에 표시됩니다 -->
+            
+            <div class="history-container">
+              <div class="history-list" id="historyList">
+                <!-- 뽑기 기록이 여기에 표시됩니다 -->
+              </div>
+              
+              <div class="history-pagination" id="historyPagination" style="display: none;">
+                <button class="pagination-button" id="prevPageButton" disabled>
+                  <span class="button-icon">◀</span>
+                  <span class="button-text">이전</span>
+                </button>
+                <div class="pagination-info">
+                  <span id="currentPage">1</span> / <span id="totalPages">1</span>
+                </div>
+                <button class="pagination-button" id="nextPageButton" disabled>
+                  <span class="button-text">다음</span>
+                  <span class="button-icon">▶</span>
+                </button>
+              </div>
             </div>
+            
             <div class="history-actions">
               <button class="clear-history-button" id="clearHistoryButton">
                 <span class="button-icon">🗑️</span>

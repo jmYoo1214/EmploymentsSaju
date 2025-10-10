@@ -1934,6 +1934,75 @@ footer {
   margin-top: 5px;
 }
 
+.history-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.history-count {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.history-page-info {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.history-container {
+  margin-bottom: 20px;
+}
+
+.history-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.pagination-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pagination-info {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  min-width: 80px;
+  text-align: center;
+}
+
 .history-actions {
   text-align: center;
   margin-top: 20px;
@@ -2022,5 +2091,21 @@ footer {
   .pick-button {
     padding: 15px 30px;
     font-size: 16px;
+  }
+
+  .history-stats {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .history-pagination {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .pagination-button {
+    width: 100%;
+    justify-content: center;
   }
 }
