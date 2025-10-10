@@ -24,6 +24,20 @@ class CompatibilityCalculator {
     this.person2BirthHour = document.getElementById('person2BirthHour');
     this.person2BirthMinute = document.getElementById('person2BirthMinute');
 
+    // 디버깅: null 체크
+    const elements = [
+      { name: 'person1BirthHour', element: this.person1BirthHour },
+      { name: 'person1BirthMinute', element: this.person1BirthMinute },
+      { name: 'person2BirthHour', element: this.person2BirthHour },
+      { name: 'person2BirthMinute', element: this.person2BirthMinute }
+    ];
+
+    for (let { name, element } of elements) {
+      if (!element) {
+        console.error(`${name} 요소를 찾을 수 없습니다.`);
+      }
+    }
+
     // 버튼들
     this.calculateButton = document.getElementById('calculateButton');
     this.shareButton = document.getElementById('shareButton');
@@ -653,7 +667,13 @@ class CompatibilityCalculator {
       this.person2BirthDate, this.person2BirthHour, this.person2BirthMinute
     ];
 
+    // null 체크 추가
     for (let field of requiredFields) {
+      if (!field) {
+        console.error('필드가 null입니다:', field);
+        alert('입력 필드를 찾을 수 없습니다. 페이지를 새로고침해주세요.');
+        return false;
+      }
       if (!field.value.trim()) {
         alert('모든 필드를 입력해주세요.');
         field.focus();
