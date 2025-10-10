@@ -80,68 +80,95 @@ class CompatibilityCalculator {
 
     // 궁합 계산 (Private 알고리즘)
     setTimeout(() => {
-      const compatibility = this.calculateCompatibilityScores(person1, person2);
-      this.displayResults(person1, person2, compatibility);
+      try {
+        console.log('궁합 계산 시작...');
+        const compatibility = this.calculateCompatibilityScores(person1, person2);
+        console.log('궁합 계산 완료:', compatibility);
+        this.displayResults(person1, person2, compatibility);
+      } catch (error) {
+        console.error('궁합 계산 에러:', error);
+        alert('궁합 계산 중 오류가 발생했습니다: ' + error.message);
+        // 버튼 복원
+        this.calculateButton.innerHTML = '<span class="button-icon">💕</span><span class="button-text">궁합 계산하기</span>';
+        this.calculateButton.disabled = false;
+      }
     }, 2000);
   }
 
   // Private 궁합 점수 계산 알고리즘 (현대적 사주학 기반)
   calculateCompatibilityScores(person1, person2) {
-    // 사주 요소 추출
-    const person1Elements = this.extractSajuElements(person1);
-    const person2Elements = this.extractSajuElements(person2);
+    try {
+      console.log('사주 요소 추출 시작...');
+      // 사주 요소 추출
+      const person1Elements = this.extractSajuElements(person1);
+      const person2Elements = this.extractSajuElements(person2);
+      console.log('사주 요소 추출 완료');
 
-    // 현대적 궁합 점수 계산 (0-100점)
-    const overallScore = this.calculateModernOverallCompatibility(
-      person1Elements,
-      person2Elements
-    );
-
-    // 현대적 속궁합 점수 계산 (0-100점)
-    const intimacyScore = this.calculateModernIntimacyCompatibility(
-      person1Elements,
-      person2Elements
-    );
-
-    // 세부 영역별 현대적 점수 계산
-    const personalityScore = this.calculatePersonalityCompatibility(
-      person1Elements,
-      person2Elements
-    );
-    const fortuneScore = this.calculateFortuneCompatibility(
-      person1Elements,
-      person2Elements
-    );
-    const familyScore = this.calculateFamilyCompatibility(
-      person1Elements,
-      person2Elements
-    );
-
-    // 현대적 궁합 타입 분류
-    const compatibilityType = this.getModernCompatibilityType(
-      overallScore,
-      intimacyScore
-    );
-
-    return {
-      overall: overallScore,
-      intimacy: intimacyScore,
-      personality: personalityScore,
-      fortune: fortuneScore,
-      family: familyScore,
-      type: compatibilityType,
-      analysis: this.generateModernAnalysis(
+      console.log('전체 궁합 점수 계산 시작...');
+      // 현대적 궁합 점수 계산 (0-100점)
+      const overallScore = this.calculateModernOverallCompatibility(
         person1Elements,
-        person2Elements,
+        person2Elements
+      );
+      console.log('전체 궁합 점수:', overallScore);
+
+      console.log('속궁합 점수 계산 시작...');
+      // 현대적 속궁합 점수 계산 (0-100점)
+      const intimacyScore = this.calculateModernIntimacyCompatibility(
+        person1Elements,
+        person2Elements
+      );
+      console.log('속궁합 점수:', intimacyScore);
+
+      console.log('세부 점수 계산 시작...');
+      // 세부 영역별 현대적 점수 계산
+      const personalityScore = this.calculatePersonalityCompatibility(
+        person1Elements,
+        person2Elements
+      );
+      const fortuneScore = this.calculateFortuneCompatibility(
+        person1Elements,
+        person2Elements
+      );
+      const familyScore = this.calculateFamilyCompatibility(
+        person1Elements,
+        person2Elements
+      );
+
+      console.log('궁합 타입 분류 시작...');
+      // 현대적 궁합 타입 분류
+      const compatibilityType = this.getModernCompatibilityType(
         overallScore,
         intimacyScore
-      ),
-      advice: this.generateModernAdvice(
-        overallScore,
-        intimacyScore,
-        compatibilityType
-      ),
-    };
+      );
+
+      console.log('분석 및 조언 생성 시작...');
+      const result = {
+        overall: overallScore,
+        intimacy: intimacyScore,
+        personality: personalityScore,
+        fortune: fortuneScore,
+        family: familyScore,
+        type: compatibilityType,
+        analysis: this.generateModernAnalysis(
+          person1Elements,
+          person2Elements,
+          overallScore,
+          intimacyScore
+        ),
+        advice: this.generateModernAdvice(
+          overallScore,
+          intimacyScore,
+          compatibilityType
+        ),
+      };
+      
+      console.log('최종 결과:', result);
+      return result;
+    } catch (error) {
+      console.error('calculateCompatibilityScores 에러:', error);
+      throw error;
+    }
   }
 
   // Private 사주 요소 추출 (전문 사주학 기반)
