@@ -88,6 +88,11 @@ class CompatibilityCalculator {
     // 사주 요소 추출
     const person1Elements = this.extractSajuElements(person1);
     const person2Elements = this.extractSajuElements(person2);
+    
+    // 디버깅 로그
+    console.log('=== 궁합 계산 시작 ===');
+    console.log('Person1 사주:', person1Elements);
+    console.log('Person2 사주:', person2Elements);
 
     // 현대적 궁합 점수 계산 (0-100점)
     const overallScore = this.calculateModernOverallCompatibility(person1Elements, person2Elements);
@@ -805,6 +810,14 @@ class CompatibilityCalculator {
     const guinScore = this.calculateGuinCompatibility(person1, person2);
     score += guinScore * 0.1;
 
+    console.log('=== 전체 궁합 점수 계산 ===');
+    console.log('오행 점수:', fiveElementScore, '가중치:', fiveElementScore * 0.3);
+    console.log('일간 점수:', ilganScore, '가중치:', ilganScore * 0.25);
+    console.log('십성 점수:', sipsungScore, '가중치:', sipsungScore * 0.2);
+    console.log('음양 점수:', yinYangScore, '가중치:', yinYangScore * 0.15);
+    console.log('귀인 점수:', guinScore, '가중치:', guinScore * 0.1);
+    console.log('최종 전체 점수:', Math.max(0, Math.min(100, Math.round(score))));
+
     return Math.max(0, Math.min(100, Math.round(score)));
   }
 
@@ -830,6 +843,14 @@ class CompatibilityCalculator {
     // 5. 체질 상성 (10점)
     const constitutionScore = this.calculateConstitutionCompatibility(person1, person2);
     score += constitutionScore * 0.1;
+
+    console.log('=== 속궁합 점수 계산 ===');
+    console.log('음양 에너지:', yinYangEnergy, '가중치:', yinYangEnergy * 0.3);
+    console.log('십성 흐름:', sipsungFlow, '가중치:', sipsungFlow * 0.25);
+    console.log('일지 궁합:', dayJiScore, '가중치:', dayJiScore * 0.2);
+    console.log('애정살:', loveStarScore, '가중치:', loveStarScore * 0.15);
+    console.log('체질 상성:', constitutionScore, '가중치:', constitutionScore * 0.1);
+    console.log('최종 속궁합 점수:', Math.max(0, Math.min(100, Math.round(score))));
 
     return Math.max(0, Math.min(100, Math.round(score)));
   }
