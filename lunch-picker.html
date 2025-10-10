@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>점심 뽑기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>🎲 점심 뽑기</h1>
+        <p>오늘 점심메뉴를 랜덤하게 추천해드려요</p>
+      </header>
+
+      <main>
+        <div class="picker-section">
+          <div class="picker-controls">
+            <h2>뽑기 옵션</h2>
+            
+            <div class="category-selection">
+              <h3>카테고리 선택</h3>
+              <div class="category-checkboxes">
+                <label class="category-checkbox">
+                  <input type="checkbox" id="korean" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">한식</span>
+                </label>
+                <label class="category-checkbox">
+                  <input type="checkbox" id="chinese" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">중식</span>
+                </label>
+                <label class="category-checkbox">
+                  <input type="checkbox" id="japanese" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">일식</span>
+                </label>
+                <label class="category-checkbox">
+                  <input type="checkbox" id="western" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">양식</span>
+                </label>
+                <label class="category-checkbox">
+                  <input type="checkbox" id="fastfood" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">패스트푸드</span>
+                </label>
+                <label class="category-checkbox">
+                  <input type="checkbox" id="beverage" checked>
+                  <span class="checkmark"></span>
+                  <span class="category-label">음료</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="portion-selection">
+              <h3>포션 크기</h3>
+              <div class="portion-options">
+                <label class="portion-option">
+                  <input type="radio" name="portion" value="small" id="small">
+                  <span class="portion-label">소 (가벼운 식사)</span>
+                </label>
+                <label class="portion-option">
+                  <input type="radio" name="portion" value="medium" id="medium" checked>
+                  <span class="portion-label">중 (보통 식사)</span>
+                </label>
+                <label class="portion-option">
+                  <input type="radio" name="portion" value="large" id="large">
+                  <span class="portion-label">대 (든든한 식사)</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="pick-button-container">
+              <button class="pick-button" id="pickButton">
+                <span class="button-text">점심 뽑기!</span>
+                <span class="button-icon">🎲</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="result-section" id="resultSection" style="display: none;">
+            <h2>오늘의 점심 추천</h2>
+            <div class="result-card" id="resultCard">
+              <!-- 결과가 여기에 표시됩니다 -->
+            </div>
+            
+            <div class="result-actions">
+              <button class="action-button secondary" id="pickAgainButton">
+                다시 뽑기
+              </button>
+              <button class="action-button primary" id="addToCalculatorButton">
+                칼로리 계산기로 이동
+              </button>
+            </div>
+          </div>
+
+          <div class="history-section" id="historySection" style="display: none;">
+            <h3>뽑기 기록</h3>
+            <div class="history-list" id="historyList">
+              <!-- 뽑기 기록이 여기에 표시됩니다 -->
+            </div>
+            <button class="clear-history-button" id="clearHistoryButton">
+              기록 지우기
+            </button>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <div class="ad-placeholder">
+                <p>728x90 배너 광고</p>
+                <small>Google AdSense</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 팁: 여러 번 뽑아보고 마음에 드는 메뉴를 찾아보세요!</p>
+      </footer>
+    </div>
+
+    <script src="lunch-picker.js"></script>
+  </body>
+</html>
+

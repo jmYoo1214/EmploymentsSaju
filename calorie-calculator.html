@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>점심메뉴 칼로리 계산기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>🍽️ 점심메뉴 칼로리 계산기</h1>
+        <p>점심메뉴의 칼로리를 쉽게 계산하고 관리해보세요</p>
+      </header>
+
+      <main>
+        <div class="calculator-section">
+          <div class="input-section">
+            <h2>개인 정보</h2>
+
+            <div class="input-group">
+              <label for="gender">성별</label>
+              <select id="gender">
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="age">나이</label>
+              <input
+                type="number"
+                id="age"
+                placeholder="나이를 입력하세요"
+                min="1"
+                max="120"
+                value="30"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="weight">체중 (kg)</label>
+              <input
+                type="number"
+                id="weight"
+                placeholder="체중을 입력하세요"
+                min="30"
+                max="200"
+                value="70"
+                step="0.1"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="height">키 (cm)</label>
+              <input
+                type="number"
+                id="height"
+                placeholder="키를 입력하세요"
+                min="100"
+                max="250"
+                value="170"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="activity">활동량</label>
+              <select id="activity">
+                <option value="sedentary">거의 운동 안함 (사무직)</option>
+                <option value="light">가벼운 운동 (주 1-3회)</option>
+                <option value="moderate">보통 운동 (주 3-5회)</option>
+                <option value="active">적극적 운동 (주 6-7회)</option>
+                <option value="very-active">
+                  매우 적극적 운동 (매일 2회 이상)
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="menu-section">
+            <h2>메뉴 선택</h2>
+
+            <div class="menu-categories">
+              <div class="category-tabs">
+                <button class="tab-button active" data-category="korean">
+                  한식
+                </button>
+                <button class="tab-button" data-category="chinese">중식</button>
+                <button class="tab-button" data-category="japanese">
+                  일식
+                </button>
+                <button class="tab-button" data-category="western">양식</button>
+                <button class="tab-button" data-category="fastfood">
+                  패스트푸드
+                </button>
+                <button class="tab-button" data-category="beverage">
+                  음료
+                </button>
+              </div>
+
+              <div class="menu-items" id="menuItems">
+                <!-- 메뉴 아이템들이 여기에 동적으로 생성됩니다 -->
+              </div>
+            </div>
+
+            <div class="selected-items">
+              <h3>선택한 메뉴</h3>
+              <div id="selectedMenuList" class="selected-menu-list">
+                <p class="empty-message">메뉴를 선택해주세요</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <h2>칼로리 계산 결과</h2>
+            <div class="calorie-summary">
+              <div class="calorie-item main-result">
+                <span>총 칼로리</span>
+                <span id="totalCalories">0 kcal</span>
+              </div>
+              <div class="calorie-item">
+                <span>일일 권장 칼로리</span>
+                <span id="dailyCalories">0 kcal</span>
+              </div>
+              <div class="calorie-item">
+                <span>점심 권장 칼로리</span>
+                <span id="lunchCalories">0 kcal</span>
+              </div>
+              <div class="calorie-item">
+                <span>칼로리 비율</span>
+                <span id="calorieRatio">0%</span>
+              </div>
+            </div>
+
+            <div class="calorie-analysis">
+              <h3>칼로리 분석</h3>
+              <div id="calorieAnalysis" class="analysis-content">
+                <p>개인 정보를 입력하고 메뉴를 선택해주세요</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <div class="ad-placeholder">
+                <p>728x90 배너 광고</p>
+                <small>Google AdSense</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 팁: 정확한 칼로리 계산을 위해 정확한 개인 정보를 입력해주세요</p>
+      </footer>
+    </div>
+
+    <script src="calorie-calculator.js"></script>
+  </body>
+</html>
+

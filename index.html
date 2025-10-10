@@ -32,12 +32,19 @@
 
             <div class="input-group">
               <label for="salaryAmount">금액</label>
-              <input
-                type="number"
-                id="salaryAmount"
-                placeholder="금액을 입력하세요"
-                min="0"
-              />
+              <div class="amount-input-container">
+                <input
+                  type="number"
+                  id="salaryAmount"
+                  placeholder="금액을 입력하세요"
+                  min="0"
+                />
+                <select id="amountUnit" class="amount-unit">
+                  <option value="원">원</option>
+                  <option value="만원">만원</option>
+                  <option value="천만원">천만원</option>
+                </select>
+              </div>
             </div>
 
             <div class="input-group">

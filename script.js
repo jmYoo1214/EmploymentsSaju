@@ -1,6 +1,7 @@
 // DOM 요소들
 const salaryType = document.getElementById("salaryType");
 const salaryAmount = document.getElementById("salaryAmount");
+const amountUnit = document.getElementById("amountUnit");
 const workHours = document.getElementById("workHours");
 const workDays = document.getElementById("workDays");
 const bonus = document.getElementById("bonus");
@@ -25,6 +26,24 @@ const incomeTax = document.getElementById("incomeTax");
 const localIncomeTax = document.getElementById("localIncomeTax");
 const totalDeduction = document.getElementById("totalDeduction");
 
+// 금액 단위 변환 함수
+function convertToWon(amount, unit) {
+  switch (unit) {
+    case "원":
+      return amount;
+    case "만원":
+      return amount * 10000;
+    case "천만원":
+      return amount * 10000000;
+    default:
+      return amount;
+  }
+}
+
+function formatCurrency(amount) {
+  return new Intl.NumberFormat("ko-KR").format(amount);
+}
+
 // 계산기 클래스
 class SalaryCalculator {
   constructor() {
@@ -37,6 +56,7 @@ class SalaryCalculator {
     [
       salaryType,
       salaryAmount,
+      amountUnit,
       workHours,
       workDays,
       bonus,
@@ -51,13 +71,15 @@ class SalaryCalculator {
   calculate() {
     try {
       const amount = parseFloat(salaryAmount.value) || 0;
+      const unit = amountUnit.value;
+      const amountInWon = convertToWon(amount, unit);
       const hours = parseFloat(workHours.value) || 40;
       const days = parseFloat(workDays.value) || 5;
       const bonusAmount = parseFloat(bonus.value) || 0;
       const tax = parseFloat(taxRate.value) || 13.5;
       const isIncludeTax = includeTax.checked;
 
-      if (amount <= 0) {
+      if (amountInWon <= 0) {
         this.clearResults();
         return;
       }
@@ -67,7 +89,7 @@ class SalaryCalculator {
       switch (salaryType.value) {
         case "annual":
           results = this.calculateFromAnnual(
-            amount,
+            amountInWon,
             hours,
             days,
             bonusAmount,
@@ -77,7 +99,7 @@ class SalaryCalculator {
           break;
         case "monthly":
           results = this.calculateFromMonthly(
-            amount,
+            amountInWon,
             hours,
             days,
             bonusAmount,
@@ -87,7 +109,7 @@ class SalaryCalculator {
           break;
         case "hourly":
           results = this.calculateFromHourly(
-            amount,
+            amountInWon,
             hours,
             days,
             bonusAmount,

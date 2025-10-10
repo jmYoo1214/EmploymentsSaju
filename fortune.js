@@ -5,6 +5,7 @@ let selectedCalendarType = "solar";
 let selectedGender = null;
 let userBirthDate = null;
 let userBirthTime = null;
+let userUUID = null;
 
 // 운세 데이터
 const fortuneData = {
@@ -75,8 +76,28 @@ const fortuneData = {
   },
 };
 
+// UUID 생성 함수
+function generateUUID() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c == "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+// UUID 가져오기 또는 생성
+function getOrCreateUUID() {
+  let uuid = localStorage.getItem("fortuneUserUUID");
+  if (!uuid) {
+    uuid = generateUUID();
+    localStorage.setItem("fortuneUserUUID", uuid);
+  }
+  return uuid;
+}
+
 // 페이지 로드 시 실행
 document.addEventListener("DOMContentLoaded", function () {
+  userUUID = getOrCreateUUID();
   initializeEventListeners();
   setDefaultValues();
   checkGPTStatus();
@@ -135,16 +156,18 @@ function setDefaultValues() {
 // GPT 연동 상태 확인
 async function checkGPTStatus() {
   try {
-    const response = await fetch("/api/status");
+    const response = await fetch("http://localhost:3000/api/status");
     const data = await response.json();
-    
+
     // GPT 상태 표시
     const statusElement = document.getElementById("gptStatus");
     if (statusElement) {
       statusElement.textContent = data.message;
-      statusElement.className = data.gptEnabled ? "gpt-enabled" : "gpt-disabled";
+      statusElement.className = data.gptEnabled
+        ? "gpt-enabled"
+        : "gpt-disabled";
     }
-    
+
     // 운세 버튼에 GPT 상태 표시
     const fortuneButton = document.getElementById("calculateFortune");
     if (fortuneButton && data.gptEnabled) {
@@ -194,7 +217,7 @@ async function calculateFortune() {
 
   try {
     // 서버 API 호출
-    const response = await fetch("/api/fortune", {
+    const response = await fetch("http://localhost:3000/api/fortune", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -204,7 +227,8 @@ async function calculateFortune() {
         birthTime: userBirthTime,
         gender: selectedGender,
         calendarType: selectedCalendarType,
-        useGPT: true, // GPT 사용 여부 (서버에서 GPT API 키가 설정되어 있으면 사용)
+        useGPT: true, // GPT 사용 여부 (캐싱 기능 추가로 활성화)
+        userUUID: userUUID, // 브라우저별 고유 ID
       }),
     });
 
