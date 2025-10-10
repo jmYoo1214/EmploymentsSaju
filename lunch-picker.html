@@ -19,94 +19,169 @@
       <main>
         <div class="picker-section">
           <div class="picker-controls">
-            <h2>뽑기 옵션</h2>
-            
+            <div class="controls-header">
+              <h2>🎯 뽑기 옵션</h2>
+              <p class="controls-subtitle">
+                원하는 카테고리와 포션을 선택해주세요
+              </p>
+            </div>
+
             <div class="category-selection">
-              <h3>카테고리 선택</h3>
-              <div class="category-checkboxes">
-                <label class="category-checkbox">
-                  <input type="checkbox" id="korean" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">한식</span>
+              <h3>🍽️ 카테고리 선택</h3>
+              <div class="category-grid">
+                <label class="category-card" data-category="korean">
+                  <input type="checkbox" id="korean" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🍚</div>
+                    <span class="category-label">한식</span>
+                    <div class="category-count" id="korean-count">8개</div>
+                  </div>
                 </label>
-                <label class="category-checkbox">
-                  <input type="checkbox" id="chinese" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">중식</span>
+                <label class="category-card" data-category="chinese">
+                  <input type="checkbox" id="chinese" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🥢</div>
+                    <span class="category-label">중식</span>
+                    <div class="category-count" id="chinese-count">8개</div>
+                  </div>
                 </label>
-                <label class="category-checkbox">
-                  <input type="checkbox" id="japanese" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">일식</span>
+                <label class="category-card" data-category="japanese">
+                  <input type="checkbox" id="japanese" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🍣</div>
+                    <span class="category-label">일식</span>
+                    <div class="category-count" id="japanese-count">8개</div>
+                  </div>
                 </label>
-                <label class="category-checkbox">
-                  <input type="checkbox" id="western" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">양식</span>
+                <label class="category-card" data-category="western">
+                  <input type="checkbox" id="western" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🍝</div>
+                    <span class="category-label">양식</span>
+                    <div class="category-count" id="western-count">8개</div>
+                  </div>
                 </label>
-                <label class="category-checkbox">
-                  <input type="checkbox" id="fastfood" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">패스트푸드</span>
+                <label class="category-card" data-category="fastfood">
+                  <input type="checkbox" id="fastfood" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🍔</div>
+                    <span class="category-label">패스트푸드</span>
+                    <div class="category-count" id="fastfood-count">8개</div>
+                  </div>
                 </label>
-                <label class="category-checkbox">
-                  <input type="checkbox" id="beverage" checked>
-                  <span class="checkmark"></span>
-                  <span class="category-label">음료</span>
+                <label class="category-card" data-category="beverage">
+                  <input type="checkbox" id="beverage" checked />
+                  <div class="category-content">
+                    <div class="category-emoji">🥤</div>
+                    <span class="category-label">음료</span>
+                    <div class="category-count" id="beverage-count">8개</div>
+                  </div>
                 </label>
               </div>
             </div>
 
             <div class="portion-selection">
-              <h3>포션 크기</h3>
-              <div class="portion-options">
-                <label class="portion-option">
-                  <input type="radio" name="portion" value="small" id="small">
-                  <span class="portion-label">소 (가벼운 식사)</span>
-                </label>
-                <label class="portion-option">
-                  <input type="radio" name="portion" value="medium" id="medium" checked>
-                  <span class="portion-label">중 (보통 식사)</span>
-                </label>
-                <label class="portion-option">
-                  <input type="radio" name="portion" value="large" id="large">
-                  <span class="portion-label">대 (든든한 식사)</span>
-                </label>
+              <h3>📏 포션 크기</h3>
+              <div class="portion-slider-container">
+                <div class="portion-slider">
+                  <input
+                    type="range"
+                    id="portionSlider"
+                    min="0"
+                    max="2"
+                    value="1"
+                    step="1"
+                  />
+                  <div class="slider-labels">
+                    <span class="slider-label active" data-value="0">소</span>
+                    <span class="slider-label active" data-value="1">중</span>
+                    <span class="slider-label" data-value="2">대</span>
+                  </div>
+                  <div class="slider-descriptions">
+                    <span class="slider-desc">가벼운 식사</span>
+                    <span class="slider-desc">보통 식사</span>
+                    <span class="slider-desc">든든한 식사</span>
+                  </div>
+                </div>
+                <div class="portion-display">
+                  <div class="portion-icon" id="portionIcon">🍽️</div>
+                  <div class="portion-text" id="portionText">
+                    중 (보통 식사)
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="pick-button-container">
               <button class="pick-button" id="pickButton">
-                <span class="button-text">점심 뽑기!</span>
-                <span class="button-icon">🎲</span>
+                <div class="button-content">
+                  <span class="button-icon">🎲</span>
+                  <span class="button-text">점심 뽑기!</span>
+                </div>
+                <div class="button-shine"></div>
               </button>
+              <div class="pick-tip">
+                💡 스페이스바를 눌러서도 뽑을 수 있어요!
+              </div>
             </div>
           </div>
 
-          <div class="result-section" id="resultSection" style="display: none;">
-            <h2>오늘의 점심 추천</h2>
+          <div class="result-section" id="resultSection" style="display: none">
+            <div class="result-header">
+              <h2>🎉 오늘의 점심 추천</h2>
+              <div class="result-subtitle">운명의 메뉴가 선택되었습니다!</div>
+            </div>
+
             <div class="result-card" id="resultCard">
+              <div class="result-animation">
+                <div class="spinning-dice">🎲</div>
+              </div>
               <!-- 결과가 여기에 표시됩니다 -->
             </div>
-            
+
             <div class="result-actions">
               <button class="action-button secondary" id="pickAgainButton">
-                다시 뽑기
+                <span class="button-icon">🔄</span>
+                <span class="button-text">다시 뽑기</span>
               </button>
               <button class="action-button primary" id="addToCalculatorButton">
-                칼로리 계산기로 이동
+                <span class="button-icon">🧮</span>
+                <span class="button-text">칼로리 계산기로 이동</span>
               </button>
+            </div>
+
+            <div class="result-stats" id="resultStats">
+              <div class="stat-item">
+                <div class="stat-label">총 메뉴 수</div>
+                <div class="stat-value" id="totalMenus">48개</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">선택된 카테고리</div>
+                <div class="stat-value" id="selectedCategories">6개</div>
+              </div>
             </div>
           </div>
 
-          <div class="history-section" id="historySection" style="display: none;">
-            <h3>뽑기 기록</h3>
+          <div
+            class="history-section"
+            id="historySection"
+            style="display: none"
+          >
+            <div class="history-header">
+              <h3>📋 뽑기 기록</h3>
+              <div class="history-subtitle">
+                최근에 뽑은 메뉴들을 확인해보세요
+              </div>
+            </div>
             <div class="history-list" id="historyList">
               <!-- 뽑기 기록이 여기에 표시됩니다 -->
             </div>
-            <button class="clear-history-button" id="clearHistoryButton">
-              기록 지우기
-            </button>
+            <div class="history-actions">
+              <button class="clear-history-button" id="clearHistoryButton">
+                <span class="button-icon">🗑️</span>
+                <span class="button-text">기록 지우기</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -132,4 +207,3 @@
     <script src="lunch-picker.js"></script>
   </body>
 </html>
-

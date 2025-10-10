@@ -295,7 +295,12 @@ const menuDatabase = {
       category: "차류",
       emoji: "🧊",
     },
-    { name: "물", calories: { small: 0, medium: 0, large: 0 }, category: "물", emoji: "💧" },
+    {
+      name: "물",
+      calories: { small: 0, medium: 0, large: 0 },
+      category: "물",
+      emoji: "💧",
+    },
   ],
 };
 
@@ -309,14 +314,28 @@ const historySection = document.getElementById("historySection");
 const historyList = document.getElementById("historyList");
 const clearHistoryButton = document.getElementById("clearHistoryButton");
 
+// 새로운 UI 요소들 (DOM 로드 후에 초기화)
+let portionSlider, portionIcon, portionText, totalMenus, selectedCategories, spinningDice;
+
 // 뽑기 기록 저장
 let pickHistory = JSON.parse(localStorage.getItem("lunchPickHistory") || "[]");
 
 // 점심 뽑기 클래스
 class LunchPicker {
   constructor() {
+    this.initializeElements();
     this.initializeEventListeners();
     this.loadHistory();
+  }
+
+  initializeElements() {
+    // DOM 요소들 초기화
+    portionSlider = document.getElementById("portionSlider");
+    portionIcon = document.getElementById("portionIcon");
+    portionText = document.getElementById("portionText");
+    totalMenus = document.getElementById("totalMenus");
+    selectedCategories = document.getElementById("selectedCategories");
+    spinningDice = document.querySelector(".spinning-dice");
   }
 
   initializeEventListeners() {
@@ -345,33 +364,107 @@ class LunchPicker {
 
     // 카테고리 체크박스 변경 시
     document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-      checkbox.addEventListener("change", () => this.updatePickButton());
+      checkbox.addEventListener("change", () => {
+        this.updatePickButton();
+        this.updateCategoryCounts();
+        this.updateStats();
+      });
     });
 
-    // 포션 라디오 버튼 변경 시
-    document.querySelectorAll('input[name="portion"]').forEach((radio) => {
-      radio.addEventListener("change", () => this.updatePickButton());
+    // 포션 슬라이더 변경 시
+    if (portionSlider) {
+      portionSlider.addEventListener("input", () =>
+        this.updatePortionDisplay()
+      );
+    }
+
+    // 카테고리 카드 클릭 시
+    document.querySelectorAll(".category-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        if (e.target.type !== "checkbox") {
+          const checkbox = card.querySelector('input[type="checkbox"]');
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event("change"));
+        }
+      });
     });
   }
 
   getSelectedCategories() {
     const categories = [];
-    document.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
-      categories.push(checkbox.id);
-    });
+    document
+      .querySelectorAll('input[type="checkbox"]:checked')
+      .forEach((checkbox) => {
+        categories.push(checkbox.id);
+      });
     return categories;
   }
 
   getSelectedPortion() {
-    const selectedPortion = document.querySelector('input[name="portion"]:checked');
+    if (portionSlider) {
+      const value = parseInt(portionSlider.value);
+      const portions = ["small", "medium", "large"];
+      return portions[value] || "medium";
+    }
+    const selectedPortion = document.querySelector(
+      'input[name="portion"]:checked'
+    );
     return selectedPortion ? selectedPortion.value : "medium";
+  }
+
+  updatePortionDisplay() {
+    if (!portionSlider || !portionIcon || !portionText) return;
+
+    const value = parseInt(portionSlider.value);
+    const portions = [
+      { size: "소", desc: "가벼운 식사", icon: "🥗" },
+      { size: "중", desc: "보통 식사", icon: "🍽️" },
+      { size: "대", desc: "든든한 식사", icon: "🍖" },
+    ];
+
+    const portion = portions[value];
+    portionIcon.textContent = portion.icon;
+    portionText.textContent = `${portion.size} (${portion.desc})`;
+
+    // 슬라이더 라벨 업데이트
+    document.querySelectorAll(".slider-label").forEach((label, index) => {
+      label.classList.toggle("active", index === value);
+    });
+  }
+
+  updateCategoryCounts() {
+    Object.keys(menuDatabase).forEach((category) => {
+      const countElement = document.getElementById(`${category}-count`);
+      if (countElement) {
+        const count = menuDatabase[category].length;
+        countElement.textContent = `${count}개`;
+      }
+    });
+  }
+
+  updateStats() {
+    const selectedCategoriesList = this.getSelectedCategories();
+    const totalMenuCount = selectedCategoriesList.reduce((total, category) => {
+      return (
+        total + (menuDatabase[category] ? menuDatabase[category].length : 0)
+      );
+    }, 0);
+
+    if (totalMenus) {
+      totalMenus.textContent = `${totalMenuCount}개`;
+    }
+
+    if (selectedCategories) {
+      selectedCategories.textContent = `${selectedCategoriesList.length}개`;
+    }
   }
 
   updatePickButton() {
     const selectedCategories = this.getSelectedCategories();
     if (selectedCategories.length === 0) {
       pickButton.disabled = true;
-      pickButton.querySelector(".button-text").textContent = "카테고리를 선택해주세요";
+      pickButton.querySelector(".button-text").textContent =
+        "카테고리를 선택해주세요";
     } else {
       pickButton.disabled = false;
       pickButton.querySelector(".button-text").textContent = "점심 뽑기!";
@@ -553,12 +646,16 @@ class LunchPicker {
             <div class="history-content">
               <div class="history-name">${item.menu}</div>
               <div class="history-details">
-                <span class="history-portion">${this.getPortionText(item.portion)}</span>
+                <span class="history-portion">${this.getPortionText(
+                  item.portion
+                )}</span>
                 <span class="history-calories">${item.calories}kcal</span>
                 <span class="history-time">${timeString}</span>
               </div>
             </div>
-            <button class="history-pick-again" onclick="picker.pickSpecificMenu('${item.menu}', '${item.category}', '${item.portion}')">
+            <button class="history-pick-again" onclick="picker.pickSpecificMenu('${
+              item.menu
+            }', '${item.category}', '${item.portion}')">
               다시 뽑기
             </button>
           </div>
@@ -591,14 +688,35 @@ class LunchPicker {
       pickButton.style.transform = "scale(1)";
     }, 150);
 
+    // 주사위 회전 애니메이션
+    if (spinningDice) {
+      spinningDice.style.display = "block";
+      spinningDice.style.animation = "spin 1s linear infinite";
+
+      setTimeout(() => {
+        spinningDice.style.display = "none";
+        spinningDice.style.animation = "none";
+      }, 2000);
+    }
+
     // 결과 카드 애니메이션
     resultCard.style.opacity = "0";
-    resultCard.style.transform = "translateY(20px)";
+    resultCard.style.transform = "translateY(20px) scale(0.9)";
     setTimeout(() => {
-      resultCard.style.transition = "all 0.5s ease-out";
+      resultCard.style.transition =
+        "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
       resultCard.style.opacity = "1";
-      resultCard.style.transform = "translateY(0)";
+      resultCard.style.transform = "translateY(0) scale(1)";
     }, 100);
+
+    // 결과 섹션 등장 애니메이션
+    resultSection.style.transform = "translateY(30px)";
+    resultSection.style.opacity = "0";
+    setTimeout(() => {
+      resultSection.style.transition = "all 0.5s ease-out";
+      resultSection.style.transform = "translateY(0)";
+      resultSection.style.opacity = "1";
+    }, 50);
   }
 }
 
@@ -607,6 +725,9 @@ let picker;
 document.addEventListener("DOMContentLoaded", () => {
   picker = new LunchPicker();
   picker.updatePickButton();
+  picker.updateCategoryCounts();
+  picker.updateStats();
+  picker.updatePortionDisplay();
 });
 
 // 키보드 단축키
@@ -622,4 +743,3 @@ document.addEventListener("keydown", (e) => {
     picker.pickLunch();
   }
 });
-
