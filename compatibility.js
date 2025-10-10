@@ -83,25 +83,25 @@ class CompatibilityCalculator {
     }, 2000);
   }
 
-  // Private 궁합 점수 계산 알고리즘 (전문 사주학 기반)
+  // Private 궁합 점수 계산 알고리즘 (현대적 사주학 기반)
   calculateCompatibilityScores(person1, person2) {
     // 사주 요소 추출
     const person1Elements = this.extractSajuElements(person1);
     const person2Elements = this.extractSajuElements(person2);
 
-    // 궁합 점수 계산 (총점 100점)
-    const overallScore = this.calculateOverallCompatibility(person1Elements, person2Elements);
+    // 현대적 궁합 점수 계산 (0-100점)
+    const overallScore = this.calculateModernOverallCompatibility(person1Elements, person2Elements);
     
-    // 속궁합 점수 계산 (총점 100점)
-    const intimacyScore = this.calculateIntimacyCompatibility(person1Elements, person2Elements);
+    // 현대적 속궁합 점수 계산 (0-100점)
+    const intimacyScore = this.calculateModernIntimacyCompatibility(person1Elements, person2Elements);
 
-    // 세부 영역별 점수 계산 (간소화)
-    const personalityScore = Math.round((overallScore + intimacyScore) / 2);
-    const fortuneScore = Math.round(overallScore * 0.8);
-    const familyScore = Math.round(intimacyScore * 0.9);
+    // 세부 영역별 현대적 점수 계산
+    const personalityScore = this.calculatePersonalityCompatibility(person1Elements, person2Elements);
+    const fortuneScore = this.calculateFortuneCompatibility(person1Elements, person2Elements);
+    const familyScore = this.calculateFamilyCompatibility(person1Elements, person2Elements);
 
-    // 궁합 타입 분류
-    const compatibilityType = this.getCompatibilityType(overallScore, intimacyScore);
+    // 현대적 궁합 타입 분류
+    const compatibilityType = this.getModernCompatibilityType(overallScore, intimacyScore);
 
     return {
       overall: overallScore,
@@ -110,8 +110,8 @@ class CompatibilityCalculator {
       fortune: fortuneScore,
       family: familyScore,
       type: compatibilityType,
-      analysis: this.generateDetailedAnalysis(person1Elements, person2Elements, overallScore, intimacyScore),
-      advice: this.generateDetailedAdvice(overallScore, intimacyScore, compatibilityType)
+      analysis: this.generateModernAnalysis(person1Elements, person2Elements, overallScore, intimacyScore),
+      advice: this.generateModernAdvice(overallScore, intimacyScore, compatibilityType)
     };
   }
 
@@ -779,6 +779,140 @@ class CompatibilityCalculator {
     
     // 페이지 상단으로 스크롤
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 현대적 궁합 점수 계산 함수들
+  calculateModernOverallCompatibility(person1, person2) {
+    let score = 50; // 기본 점수
+
+    // 1. 오행 상생/상극 분석 (30점)
+    const fiveElementScore = this.calculateFiveElementCompatibility(person1, person2);
+    score += fiveElementScore * 0.3;
+
+    // 2. 일간 궁합 (25점)
+    const ilganScore = this.calculateIlganCompatibility(person1, person2);
+    score += ilganScore * 0.25;
+
+    // 3. 십성 조화 (20점)
+    const sipsungScore = this.calculateSipsungCompatibility(person1, person2);
+    score += sipsungScore * 0.2;
+
+    // 4. 음양 밸런스 (15점)
+    const yinYangScore = this.calculateYinYangCompatibility(person1, person2);
+    score += yinYangScore * 0.15;
+
+    // 5. 귀인성 (10점)
+    const guinScore = this.calculateGuinCompatibility(person1, person2);
+    score += guinScore * 0.1;
+
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
+  calculateModernIntimacyCompatibility(person1, person2) {
+    let score = 50; // 기본 점수
+
+    // 1. 음양 에너지 조화 (30점)
+    const yinYangEnergy = this.calculateYinYangEnergyCompatibility(person1, person2);
+    score += yinYangEnergy * 0.3;
+
+    // 2. 십성 흐름 (25점)
+    const sipsungFlow = this.calculateSipsungFlowCompatibility(person1, person2);
+    score += sipsungFlow * 0.25;
+
+    // 3. 일지 궁합 (20점)
+    const dayJiScore = this.calculateDayJiCompatibility(person1, person2);
+    score += dayJiScore * 0.2;
+
+    // 4. 애정살 (15점)
+    const loveStarScore = this.calculateLoveStarCompatibility(person1, person2);
+    score += loveStarScore * 0.15;
+
+    // 5. 체질 상성 (10점)
+    const constitutionScore = this.calculateConstitutionCompatibility(person1, person2);
+    score += constitutionScore * 0.1;
+
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
+  calculatePersonalityCompatibility(person1, person2) {
+    const overall = this.calculateModernOverallCompatibility(person1, person2);
+    const intimacy = this.calculateModernIntimacyCompatibility(person1, person2);
+    
+    // 성격궁합은 전체궁합의 70% + 속궁합의 30%
+    return Math.round(overall * 0.7 + intimacy * 0.3);
+  }
+
+  calculateFortuneCompatibility(person1, person2) {
+    const overall = this.calculateModernOverallCompatibility(person1, person2);
+    const intimacy = this.calculateModernIntimacyCompatibility(person1, person2);
+    
+    // 운세궁합은 전체궁합의 80% + 속궁합의 20%
+    return Math.round(overall * 0.8 + intimacy * 0.2);
+  }
+
+  calculateFamilyCompatibility(person1, person2) {
+    const overall = this.calculateModernOverallCompatibility(person1, person2);
+    const intimacy = this.calculateModernIntimacyCompatibility(person1, person2);
+    
+    // 가정궁합은 전체궁합의 60% + 속궁합의 40%
+    return Math.round(overall * 0.6 + intimacy * 0.4);
+  }
+
+  getModernCompatibilityType(overallScore, intimacyScore) {
+    const avgScore = (overallScore + intimacyScore) / 2;
+    
+    if (avgScore >= 90) return '💎 완벽한 궁합';
+    if (avgScore >= 80) return '💕 매우 좋은 궁합';
+    if (avgScore >= 70) return '💖 좋은 궁합';
+    if (avgScore >= 60) return '💝 보통의 궁합';
+    if (avgScore >= 50) return '💔 노력이 필요한 궁합';
+    return '💢 어려운 궁합';
+  }
+
+  generateModernAnalysis(person1, person2, overallScore, intimacyScore) {
+    const analysis = [];
+    
+    // 전체 궁합 분석
+    if (overallScore >= 80) {
+      analysis.push('🌟 두 분은 매우 조화로운 궁합을 가지고 있습니다.');
+    } else if (overallScore >= 60) {
+      analysis.push('✨ 서로를 잘 이해하고 보완하는 관계입니다.');
+    } else {
+      analysis.push('💪 서로의 차이를 인정하고 노력하면 좋은 관계가 될 수 있습니다.');
+    }
+
+    // 속궁합 분석
+    if (intimacyScore >= 80) {
+      analysis.push('💕 감정적 교감이 매우 뛰어납니다.');
+    } else if (intimacyScore >= 60) {
+      analysis.push('💖 서로에게 끌림을 느끼는 관계입니다.');
+    } else {
+      analysis.push('💝 시간을 두고 서로를 알아가는 것이 좋겠습니다.');
+    }
+
+    return analysis.join(' ');
+  }
+
+  generateModernAdvice(overallScore, intimacyScore, compatibilityType) {
+    const advice = [];
+    
+    if (overallScore >= 80) {
+      advice.push('🎉 이미 완벽한 궁합입니다! 서로를 소중히 여기세요.');
+    } else if (overallScore >= 60) {
+      advice.push('💪 서로의 장점을 인정하고 부족한 부분을 보완해보세요.');
+    } else {
+      advice.push('🤝 차이를 인정하고 서로를 이해하려는 노력이 필요합니다.');
+    }
+
+    if (intimacyScore >= 80) {
+      advice.push('💕 감정적 교감을 더 깊게 나누어보세요.');
+    } else if (intimacyScore >= 60) {
+      advice.push('💖 서로의 마음을 열고 진솔한 대화를 해보세요.');
+    } else {
+      advice.push('💝 천천히 서로를 알아가는 시간을 가져보세요.');
+    }
+
+    return advice.join(' ');
   }
 }
 
