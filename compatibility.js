@@ -1327,6 +1327,129 @@ class CompatibilityCalculator {
 
     return advice.join(" ");
   }
+
+  // 누락된 계산 함수들 추가
+  calculateFiveElementCompatibility(person1, person2) {
+    // 오행 상생 관계 (간소화)
+    const fiveElementTable = {
+      목화: 8,
+      화토: 7,
+      토금: 6,
+      금수: 8,
+      수목: 7,
+      목금: 4,
+      화수: 5,
+      토목: 6,
+      금화: 5,
+      수토: 6,
+    };
+
+    // 간단한 오행 추출
+    const element1 = this.getFiveElement(person1.day);
+    const element2 = this.getFiveElement(person2.day);
+
+    const key1 = element1 + element2;
+    const key2 = element2 + element1;
+
+    return fiveElementTable[key1] || fiveElementTable[key2] || 5;
+  }
+
+  calculateIlganCompatibility(person1, person2) {
+    // 일간 궁합 (간소화)
+    const ilganTable = {
+      갑을: 6, 갑병: 7, 갑정: 8, 갑무: 5, 갑기: 6,
+      갑경: 4, 갑신: 5, 갑임: 7, 갑계: 8,
+      을갑: 6, 을병: 8, 을정: 7, 을무: 6, 을기: 5,
+      을경: 5, 을신: 4, 을임: 8, 을계: 7,
+      // 나머지 조합들...
+    };
+
+    const key1 = person1.day.charAt(0) + person2.day.charAt(0);
+    const key2 = person2.day.charAt(0) + person1.day.charAt(0);
+
+    return ilganTable[key1] || ilganTable[key2] || 5;
+  }
+
+  calculateSipsungCompatibility(person1, person2) {
+    // 십성 조화 (간소화)
+    const sipsungTable = {
+      비견비견: 6, 비견겁재: 7, 비견식신: 8, 비견상관: 7,
+      비견편재: 6, 비견정재: 7, 비견편관: 5, 비견정관: 6,
+      비견편인: 7, 비견정인: 8,
+      // 나머지 조합들...
+    };
+
+    const key1 = person1.sipsung.day + person2.sipsung.day;
+    const key2 = person2.sipsung.day + person1.sipsung.day;
+
+    return sipsungTable[key1] || sipsungTable[key2] || 5;
+  }
+
+  calculateYinYangCompatibility(person1, person2) {
+    // 음양 밸런스 (간소화)
+    const yinYang1 = person1.yinYang.dayYinYang;
+    const yinYang2 = person2.yinYang.dayYinYang;
+
+    if (yinYang1 !== yinYang2) {
+      return 8; // 음양 조화
+    } else {
+      return 5; // 같은 음양
+    }
+  }
+
+  calculateYinYangEnergyCompatibility(person1, person2) {
+    // 음양 에너지 조화
+    const gender1 = person1.genderYinYang;
+    const gender2 = person2.genderYinYang;
+
+    if (gender1 !== gender2) {
+      return 8; // 남녀 조화
+    } else {
+      return 5; // 같은 성별
+    }
+  }
+
+  calculateSipsungFlowCompatibility(person1, person2) {
+    // 십성 흐름 (간소화)
+    return this.calculateSipsungCompatibility(person1, person2);
+  }
+
+  calculateDayJiCompatibility(person1, person2) {
+    // 일지 궁합 (간소화)
+    const dayJiTable = {
+      자축: 8, 축인: 6, 인묘: 9, 묘진: 7, 진사: 5,
+      사오: 8, 오미: 6, 미신: 7, 신유: 9, 유술: 8,
+      술해: 6, 해자: 7,
+    };
+
+    const key1 = person1.day.slice(-1) + person2.day.slice(-1);
+    const key2 = person2.day.slice(-1) + person1.day.slice(-1);
+
+    return dayJiTable[key1] || dayJiTable[key2] || 5;
+  }
+
+  calculateLoveStarCompatibility(person1, person2) {
+    // 애정살 (간소화)
+    const loveStarTable = {
+      정재정재: 8, 정재편재: 7, 정재정관: 6, 정재편관: 5,
+      편재정재: 7, 편재편재: 6, 편재정관: 5, 편재편관: 4,
+      // 나머지 조합들...
+    };
+
+    const key1 = person1.sipsung.day + person2.sipsung.day;
+    const key2 = person2.sipsung.day + person1.sipsung.day;
+
+    return loveStarTable[key1] || loveStarTable[key2] || 5;
+  }
+
+  getFiveElement(ganji) {
+    const gan = ganji.charAt(0);
+    const ganToElement = {
+      갑: "목", 을: "목", 병: "화", 정: "화", 무: "토",
+      기: "토", 경: "금", 신: "금", 임: "수", 계: "수",
+    };
+    return ganToElement[gan] || "토";
+  }
 }
 
 // 페이지 로드 시 초기화
