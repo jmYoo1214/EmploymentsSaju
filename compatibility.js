@@ -1114,10 +1114,8 @@ class CompatibilityCalculator {
       typeElement.className = "compatibility-type";
       typeElement.innerHTML = `
         <div class="type-badge">
-          <span class="type-emoji">${compatibility.type.emoji}</span>
-          <span class="type-name">${compatibility.type.type}</span>
+          <span class="type-name">${compatibility.type}</span>
         </div>
-        <div class="type-description">${compatibility.type.description}</div>
       `;
 
       // 기존 결과 헤더에 타입 추가
