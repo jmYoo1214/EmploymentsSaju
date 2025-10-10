@@ -2298,6 +2298,38 @@ footer {
   font-weight: 500;
 }
 
+.compatibility-type {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  padding: 12px 24px;
+  border-radius: 25px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.type-emoji {
+  font-size: 20px;
+}
+
+.type-name {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.type-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-style: italic;
+}
+
 .compatibility-scores {
   margin-bottom: 30px;
 }
