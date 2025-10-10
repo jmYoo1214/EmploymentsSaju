@@ -54,22 +54,21 @@
                 <input type="date" id="person1BirthDate" />
               </div>
               <div class="input-group">
-                <label for="person1BirthTime">출생시간</label>
-                <select id="person1BirthTime">
-                  <option value="">시간 선택</option>
-                  <option value="0">자시 (23:30-01:29)</option>
-                  <option value="1">축시 (01:30-03:29)</option>
-                  <option value="2">인시 (03:30-05:29)</option>
-                  <option value="3">묘시 (05:30-07:29)</option>
-                  <option value="4">진시 (07:30-09:29)</option>
-                  <option value="5">사시 (09:30-11:29)</option>
-                  <option value="6">오시 (11:30-13:29)</option>
-                  <option value="7">미시 (13:30-15:29)</option>
-                  <option value="8">신시 (15:30-17:29)</option>
-                  <option value="9">유시 (17:30-19:29)</option>
-                  <option value="10">술시 (19:30-21:29)</option>
-                  <option value="11">해시 (21:30-23:29)</option>
-                </select>
+                <label>출생시간</label>
+                <div class="time-input-container">
+                  <div class="time-inputs">
+                    <div class="time-input-group">
+                      <label for="person1BirthHour">시</label>
+                      <input type="number" id="person1BirthHour" min="0" max="23" placeholder="23" />
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-input-group">
+                      <label for="person1BirthMinute">분</label>
+                      <input type="number" id="person1BirthMinute" min="0" max="59" placeholder="50" />
+                    </div>
+                  </div>
+                  <div class="time-help-text">정확한 출생시간을 입력해주세요</div>
+                </div>
               </div>
             </div>
 
@@ -103,22 +102,21 @@
                 <input type="date" id="person2BirthDate" />
               </div>
               <div class="input-group">
-                <label for="person2BirthTime">출생시간</label>
-                <select id="person2BirthTime">
-                  <option value="">시간 선택</option>
-                  <option value="0">자시 (23:30-01:29)</option>
-                  <option value="1">축시 (01:30-03:29)</option>
-                  <option value="2">인시 (03:30-05:29)</option>
-                  <option value="3">묘시 (05:30-07:29)</option>
-                  <option value="4">진시 (07:30-09:29)</option>
-                  <option value="5">사시 (09:30-11:29)</option>
-                  <option value="6">오시 (11:30-13:29)</option>
-                  <option value="7">미시 (13:30-15:29)</option>
-                  <option value="8">신시 (15:30-17:29)</option>
-                  <option value="9">유시 (17:30-19:29)</option>
-                  <option value="10">술시 (19:30-21:29)</option>
-                  <option value="11">해시 (21:30-23:29)</option>
-                </select>
+                <label>출생시간</label>
+                <div class="time-input-container">
+                  <div class="time-inputs">
+                    <div class="time-input-group">
+                      <label for="person2BirthHour">시</label>
+                      <input type="number" id="person2BirthHour" min="0" max="23" placeholder="18" />
+                    </div>
+                    <div class="time-separator">:</div>
+                    <div class="time-input-group">
+                      <label for="person2BirthMinute">분</label>
+                      <input type="number" id="person2BirthMinute" min="0" max="59" placeholder="00" />
+                    </div>
+                  </div>
+                  <div class="time-help-text">정확한 출생시간을 입력해주세요</div>
+                </div>
               </div>
             </div>
           </div>

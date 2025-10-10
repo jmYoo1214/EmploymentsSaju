@@ -14,13 +14,15 @@ class CompatibilityCalculator {
     this.person1Gender = document.getElementById('person1Gender');
     this.person1Calendar = document.getElementById('person1Calendar');
     this.person1BirthDate = document.getElementById('person1BirthDate');
-    this.person1BirthTime = document.getElementById('person1BirthTime');
+    this.person1BirthHour = document.getElementById('person1BirthHour');
+    this.person1BirthMinute = document.getElementById('person1BirthMinute');
 
     this.person2Name = document.getElementById('person2Name');
     this.person2Gender = document.getElementById('person2Gender');
     this.person2Calendar = document.getElementById('person2Calendar');
     this.person2BirthDate = document.getElementById('person2BirthDate');
-    this.person2BirthTime = document.getElementById('person2BirthTime');
+    this.person2BirthHour = document.getElementById('person2BirthHour');
+    this.person2BirthMinute = document.getElementById('person2BirthMinute');
 
     // 버튼들
     this.calculateButton = document.getElementById('calculateButton');
@@ -106,8 +108,8 @@ class CompatibilityCalculator {
     const month = birthDate.getMonth() + 1;
     const day = birthDate.getDate();
     
-    // 출생시간을 실제 시간으로 변환
-    const hour = this.convertBirthTimeToHour(person.birthTime);
+    // 출생시간을 실제 시간으로 변환 (시,분 입력)
+    const hour = this.convertBirthTimeToHour(person.birthHour, person.birthMinute);
 
     // 정확한 간지 계산
     const ganji = this.calculateAccurateGanji(year, month, day, hour);
@@ -144,24 +146,17 @@ class CompatibilityCalculator {
     };
   }
 
-  // 출생시간을 실제 시간으로 변환
-  convertBirthTimeToHour(birthTime) {
-    const timeMap = {
-      '0': 23,  // 자시 (23:30-01:29) - 23시로 변환
-      '1': 1,   // 축시 (01:30-03:29)
-      '2': 3,   // 인시 (03:30-05:29)
-      '3': 5,   // 묘시 (05:30-07:29)
-      '4': 7,   // 진시 (07:30-09:29)
-      '5': 9,   // 사시 (09:30-11:29)
-      '6': 11,  // 오시 (11:30-13:29)
-      '7': 13,  // 미시 (13:30-15:29)
-      '8': 15,  // 신시 (15:30-17:29)
-      '9': 17,  // 유시 (17:30-19:29)
-      '10': 19, // 술시 (19:30-21:29)
-      '11': 21  // 해시 (21:30-23:29)
-    };
+  // 출생시간을 실제 시간으로 변환 (시,분 입력)
+  convertBirthTimeToHour(birthHour, birthMinute) {
+    const hour = parseInt(birthHour) || 12; // 기본값: 오시
+    const minute = parseInt(birthMinute) || 0;
     
-    return timeMap[birthTime] || 12; // 기본값: 오시
+    // 23:30 이후는 야자시로 간주하여 다음날로 계산
+    if (hour === 23 && minute >= 30) {
+      return 23; // 야자시로 처리
+    }
+    
+    return hour;
   }
 
   // 날짜로부터 간지 계산하는 헬퍼 함수
@@ -652,10 +647,10 @@ class CompatibilityCalculator {
   // UI 관련 함수들
   validateInputs() {
     const requiredFields = [
-      this.person1Name, this.person1Gender, this.person1Calendar, 
-      this.person1BirthDate, this.person1BirthTime,
+      this.person1Name, this.person1Gender, this.person1Calendar,
+      this.person1BirthDate, this.person1BirthHour, this.person1BirthMinute,
       this.person2Name, this.person2Gender, this.person2Calendar,
-      this.person2BirthDate, this.person2BirthTime
+      this.person2BirthDate, this.person2BirthHour, this.person2BirthMinute
     ];
 
     for (let field of requiredFields) {
@@ -676,7 +671,8 @@ class CompatibilityCalculator {
       gender: document.getElementById(prefix + 'Gender').value,
       calendar: document.getElementById(prefix + 'Calendar').value,
       birthDate: document.getElementById(prefix + 'BirthDate').value,
-      birthTime: document.getElementById(prefix + 'BirthTime').value
+      birthHour: document.getElementById(prefix + 'BirthHour').value,
+      birthMinute: document.getElementById(prefix + 'BirthMinute').value
     };
   }
 
