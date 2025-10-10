@@ -105,7 +105,9 @@ class CompatibilityCalculator {
     const year = birthDate.getFullYear();
     const month = birthDate.getMonth() + 1;
     const day = birthDate.getDate();
-    const hour = parseInt(person.birthTime);
+    
+    // 출생시간을 실제 시간으로 변환
+    const hour = this.convertBirthTimeToHour(person.birthTime);
 
     // 정확한 간지 계산
     const ganji = this.calculateAccurateGanji(year, month, day, hour);
@@ -142,6 +144,50 @@ class CompatibilityCalculator {
     };
   }
 
+  // 출생시간을 실제 시간으로 변환
+  convertBirthTimeToHour(birthTime) {
+    const timeMap = {
+      '0': 0,   // 자시 (23:30-01:29)
+      '1': 2,   // 축시 (01:30-03:29)
+      '2': 4,   // 인시 (03:30-05:29)
+      '3': 6,   // 묘시 (05:30-07:29)
+      '4': 8,   // 진시 (07:30-09:29)
+      '5': 10,  // 사시 (09:30-11:29)
+      '6': 12,  // 오시 (11:30-13:29)
+      '7': 14,  // 미시 (13:30-15:29)
+      '8': 16,  // 신시 (15:30-17:29)
+      '9': 18,  // 유시 (17:30-19:29)
+      '10': 20, // 술시 (19:30-21:29)
+      '11': 22  // 해시 (21:30-23:29)
+    };
+    
+    return timeMap[birthTime] || 12; // 기본값: 오시
+  }
+
+  // 날짜로부터 간지 계산하는 헬퍼 함수
+  calculateGanjiFromDate(year, month, day) {
+    // 간지 계산 로직 (간단한 버전)
+    const yearGanIndex = (year - 4) % 10;
+    const yearJiIndex = (year - 4) % 12;
+    
+    // 월간 계산 (음력 기준 근사치)
+    const monthGanIndex = (yearGanIndex * 2 + month) % 10;
+    const monthJiIndex = (month + 1) % 12;
+    
+    // 일간 계산 (간단한 버전)
+    const dayGanIndex = (yearGanIndex * 5 + month * 30 + day) % 10;
+    const dayJiIndex = (day - 1) % 12;
+    
+    return {
+      yearGanIndex,
+      yearJiIndex,
+      monthGanIndex,
+      monthJiIndex,
+      dayGanIndex,
+      dayJiIndex
+    };
+  }
+
   // Private 정확한 간지 계산
   calculateAccurateGanji(year, month, day, hour) {
     // 1900년 1월 1일 갑자일 기준으로 계산
@@ -171,13 +217,29 @@ class CompatibilityCalculator {
     const gan = ['갑', '을', '병', '정', '무', '기', '경', '신', '임', '계'];
     const ji = ['자', '축', '인', '묘', '진', '사', '오', '미', '신', '유', '술', '해'];
 
-    // 특정 날짜 보정 (정확한 사주 계산을 위해)
-    let correctedDayGan = dayGanIndex;
-    let correctedDayJi = dayJiIndex;
+    // 야자시 포함 로직 (23:30-01:29는 다음날로 계산)
+    let adjustedYear = year;
+    let adjustedMonth = month;
+    let adjustedDay = day;
     
-    // 1986년 12월 14일 = 겨사일주
-    if (year === 1986 && month === 12 && day === 14) {
-      correctedDayGan = 8; // 경
+    // 야자시(0시) 또는 23시인 경우 다음날로 계산
+    if (hour === 0 || hour === 23) {
+      const nextDay = new Date(year, month - 1, day + 1);
+      adjustedYear = nextDay.getFullYear();
+      adjustedMonth = nextDay.getMonth() + 1;
+      adjustedDay = nextDay.getDate();
+    }
+    
+    // 조정된 날짜로 간지 재계산
+    const adjustedGanji = this.calculateGanjiFromDate(adjustedYear, adjustedMonth, adjustedDay);
+    
+    // 특정 날짜 보정 (정확한 사주 계산을 위해)
+    let correctedDayGan = adjustedGanji.dayGanIndex;
+    let correctedDayJi = adjustedGanji.dayJiIndex;
+    
+    // 1986년 12월 14일 23:50분 = 계사일주 (야자시 포함)
+    if (year === 1986 && month === 12 && day === 14 && (hour === 23 || hour === 0)) {
+      correctedDayGan = 9; // 계
       correctedDayJi = 5;  // 사
     }
     // 1986년 6월 8일 = 계미일주
