@@ -1096,17 +1096,19 @@ class CompatibilityCalculator {
   }
 
   displayResults(person1, person2, compatibility) {
+    console.log('displayResults 호출됨:', { person1, person2, compatibility });
+    
     // 결과 표시
-    this.coupleNames.textContent = `${person1.name} & ${person2.name}`;
-    this.overallScore.textContent = `${compatibility.overall}점`;
+    this.coupleNames.textContent = `${person1.name || '이름없음'} & ${person2.name || '이름없음'}`;
+    this.overallScore.textContent = `${compatibility.overall || 0}점`;
     this.overallDescription.textContent = this.getScoreDescription(
-      compatibility.overall
+      compatibility.overall || 0
     );
 
-    this.intimacyScore.textContent = `${compatibility.intimacy}점`;
-    this.personalityScore.textContent = `${compatibility.personality}점`;
-    this.fortuneScore.textContent = `${compatibility.fortune}점`;
-    this.familyScore.textContent = `${compatibility.family}점`;
+    this.intimacyScore.textContent = `${compatibility.intimacy || 0}점`;
+    this.personalityScore.textContent = `${compatibility.personality || 0}점`;
+    this.fortuneScore.textContent = `${compatibility.fortune || 0}점`;
+    this.familyScore.textContent = `${compatibility.family || 0}점`;
 
     // 궁합 타입 표시
     if (compatibility.type) {
@@ -1125,8 +1127,8 @@ class CompatibilityCalculator {
       }
     }
 
-    this.analysisContent.innerHTML = compatibility.analysis;
-    this.adviceContent.innerHTML = compatibility.advice;
+    this.analysisContent.innerHTML = compatibility.analysis || '분석 결과를 불러올 수 없습니다.';
+    this.adviceContent.innerHTML = compatibility.advice || '조언을 불러올 수 없습니다.';
 
     // 결과 섹션 표시
     this.resultSection.style.display = "block";
