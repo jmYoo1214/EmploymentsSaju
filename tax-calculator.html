@@ -23,104 +23,177 @@
       <main>
         <div class="calculator-section">
           <div class="input-section">
-            <h2>계산 옵션</h2>
-
-            <div class="input-group">
-              <label for="taxType">세금 유형</label>
-              <select id="taxType">
-                <option value="income">소득세</option>
-                <option value="vat">부가가치세</option>
-                <option value="property">재산세</option>
-                <option value="gift">증여세</option>
-              </select>
+            <div class="section-header">
+              <h2>🧮 계산 옵션</h2>
+              <p>세금 정보를 입력해주세요</p>
             </div>
 
-            <div class="input-group">
-              <label for="amount">금액</label>
-              <input
-                type="number"
-                id="amount"
-                placeholder="금액을 입력하세요"
-                min="0"
-              />
+            <div class="input-card">
+              <div class="input-group">
+                <label for="taxType">
+                  <span class="label-icon">📊</span>
+                  세금 유형
+                </label>
+                <select id="taxType" class="modern-select">
+                  <option value="income">소득세</option>
+                  <option value="vat">부가가치세</option>
+                  <option value="property">재산세</option>
+                  <option value="gift">증여세</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label for="amount">
+                  <span class="label-icon">💵</span>
+                  금액
+                </label>
+                <input
+                  type="number"
+                  id="amount"
+                  placeholder="금액을 입력하세요"
+                  min="0"
+                  class="modern-input"
+                />
+              </div>
             </div>
 
-            <div class="input-group" id="incomeOptions">
-              <label for="incomeType">소득 유형</label>
-              <select id="incomeType">
-                <option value="salary">급여소득</option>
-                <option value="business">사업소득</option>
-                <option value="interest">이자소득</option>
-                <option value="dividend">배당소득</option>
-              </select>
-            </div>
+            <div class="input-card">
+              <div class="input-group" id="incomeOptions">
+                <label for="incomeType">
+                  <span class="label-icon">💼</span>
+                  소득 유형
+                </label>
+                <select id="incomeType" class="modern-select">
+                  <option value="salary">급여소득</option>
+                  <option value="business">사업소득</option>
+                  <option value="interest">이자소득</option>
+                  <option value="dividend">배당소득</option>
+                </select>
+              </div>
 
-            <div class="input-group" id="vatOptions" style="display: none">
-              <label for="vatType">부가가치세 유형</label>
-              <select id="vatType">
-                <option value="supply">공급가액</option>
-                <option value="total">부가세포함금액</option>
-              </select>
-            </div>
+              <div class="input-group" id="vatOptions" style="display: none">
+                <label for="vatType">
+                  <span class="label-icon">🏪</span>
+                  부가가치세 유형
+                </label>
+                <select id="vatType" class="modern-select">
+                  <option value="supply">공급가액</option>
+                  <option value="total">부가세포함금액</option>
+                </select>
+              </div>
 
-            <div class="input-group">
-              <label for="deduction">공제액</label>
-              <input
-                type="number"
-                id="deduction"
-                placeholder="공제액을 입력하세요"
-                min="0"
-                value="0"
-              />
+              <div class="input-group">
+                <label for="deduction">
+                  <span class="label-icon">📉</span>
+                  공제액
+                </label>
+                <input
+                  type="number"
+                  id="deduction"
+                  placeholder="공제액을 입력하세요"
+                  min="0"
+                  value="0"
+                  class="modern-input"
+                />
+              </div>
             </div>
           </div>
 
           <div class="result-section">
-            <h2>계산 결과</h2>
-            <div class="take-home-section">
-              <div class="take-home-item main-result">
-                <span>세금</span>
-                <span id="taxAmount">₩0</span>
+            <div class="section-header">
+              <h2>📊 계산 결과</h2>
+              <p>세금 계산 결과입니다</p>
+            </div>
+            
+            <div class="result-cards">
+              <div class="result-card main-result">
+                <div class="result-icon">💸</div>
+                <div class="result-content">
+                  <span class="result-label">세금</span>
+                  <span class="result-value" id="taxAmount">₩0</span>
+                </div>
               </div>
-              <div class="take-home-item">
-                <span>세전 금액</span>
-                <span id="beforeTax">₩0</span>
+              
+              <div class="result-card">
+                <div class="result-icon">💰</div>
+                <div class="result-content">
+                  <span class="result-label">세전 금액</span>
+                  <span class="result-value" id="beforeTax">₩0</span>
+                </div>
               </div>
-              <div class="take-home-item">
-                <span>세후 금액</span>
-                <span id="afterTax">₩0</span>
+              
+              <div class="result-card">
+                <div class="result-icon">💳</div>
+                <div class="result-content">
+                  <span class="result-label">세후 금액</span>
+                  <span class="result-value" id="afterTax">₩0</span>
+                </div>
               </div>
             </div>
 
             <div class="deduction-section">
-              <h3>세금 상세</h3>
-              <div class="deduction-item">
-                <span>과세표준</span>
-                <span id="taxableAmount">₩0</span>
+              <div class="section-header">
+                <h3>📋 세금 상세</h3>
+                <p>세금 계산 내역</p>
               </div>
-              <div class="deduction-item">
-                <span>세율</span>
-                <span id="taxRate">0%</span>
-              </div>
-              <div class="deduction-item">
-                <span>공제액</span>
-                <span id="deductionAmount">₩0</span>
-              </div>
-              <div class="deduction-item total-deduction">
-                <span>실제 세금</span>
-                <span id="actualTax">₩0</span>
+              
+              <div class="deduction-grid">
+                <div class="deduction-card">
+                  <div class="deduction-icon">📊</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">과세표준</span>
+                    <span class="deduction-value" id="taxableAmount">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">📈</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">세율</span>
+                    <span class="deduction-value" id="taxRate">0%</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">📉</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">공제액</span>
+                    <span class="deduction-value" id="deductionAmount">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card total-card">
+                  <div class="deduction-icon">💸</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">실제 세금</span>
+                    <span class="deduction-value" id="actualTax">₩0</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="summary-section">
-              <h3>요약</h3>
-              <div class="summary-item">
-                <span>세금 부담률</span>
-                <span id="taxBurden">0%</span>
+              <div class="section-header">
+                <h3>📊 요약</h3>
+                <p>세금 부담 및 절세 효과</p>
               </div>
-              <div class="summary-item">
-                <span>절세 효과</span>
-                <span id="taxSaving">₩0</span>
+              
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <div class="summary-icon">📊</div>
+                  <div class="summary-content">
+                    <span class="summary-label">세금 부담률</span>
+                    <span class="summary-value" id="taxBurden">0%</span>
+                  </div>
+                </div>
+                
+                <div class="summary-card">
+                  <div class="summary-icon">💡</div>
+                  <div class="summary-content">
+                    <span class="summary-label">절세 효과</span>
+                    <span class="summary-value" id="taxSaving">₩0</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

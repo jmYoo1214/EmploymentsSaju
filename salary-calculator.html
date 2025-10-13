@@ -23,143 +23,244 @@
       <main>
         <div class="calculator-section">
           <div class="input-section">
-            <h2>계산 옵션</h2>
-
-            <div class="input-group">
-              <label for="salaryType">계산 유형</label>
-              <select id="salaryType">
-                <option value="annual">연봉 → 월급/시급</option>
-                <option value="monthly">월급 → 연봉/시급</option>
-                <option value="hourly">시급 → 연봉/월급</option>
-              </select>
+            <div class="section-header">
+              <h2>💰 계산 옵션</h2>
+              <p>급여 정보를 입력해주세요</p>
             </div>
 
-            <div class="input-group">
-              <label for="salaryAmount">금액</label>
-              <div class="amount-input-container">
-                <input
-                  type="number"
-                  id="salaryAmount"
-                  placeholder="금액을 입력하세요"
-                  min="0"
-                />
-                <select id="amountUnit" class="amount-unit">
-                  <option value="원">원</option>
-                  <option value="만원">만원</option>
-                  <option value="천만원">천만원</option>
+            <div class="input-card">
+              <div class="input-group">
+                <label for="salaryType">
+                  <span class="label-icon">📊</span>
+                  계산 유형
+                </label>
+                <select id="salaryType" class="modern-select">
+                  <option value="annual">연봉 → 월급/시급</option>
+                  <option value="monthly">월급 → 연봉/시급</option>
+                  <option value="hourly">시급 → 연봉/월급</option>
                 </select>
+              </div>
+
+              <div class="input-group">
+                <label for="salaryAmount">
+                  <span class="label-icon">💵</span>
+                  금액
+                </label>
+                <div class="amount-input-container">
+                  <input
+                    type="number"
+                    id="salaryAmount"
+                    placeholder="금액을 입력하세요"
+                    min="0"
+                    class="modern-input"
+                  />
+                  <select id="amountUnit" class="amount-unit modern-select">
+                    <option value="원">원</option>
+                    <option value="만원">만원</option>
+                    <option value="천만원">천만원</option>
+                  </select>
+                </div>
               </div>
             </div>
 
-            <div class="input-group">
-              <label for="workHours">주당 근무시간</label>
-              <input
-                type="number"
-                id="workHours"
-                value="40"
-                min="1"
-                max="168"
-              />
+            <div class="input-card">
+              <div class="input-row">
+                <div class="input-group">
+                  <label for="workHours">
+                    <span class="label-icon">⏰</span>
+                    주당 근무시간
+                  </label>
+                  <input
+                    type="number"
+                    id="workHours"
+                    value="40"
+                    min="1"
+                    max="168"
+                    class="modern-input"
+                  />
+                </div>
+
+                <div class="input-group">
+                  <label for="workDays">
+                    <span class="label-icon">📅</span>
+                    주당 근무일수
+                  </label>
+                  <input type="number" id="workDays" value="5" min="1" max="7" class="modern-input" />
+                </div>
+              </div>
+
+              <div class="input-row">
+                <div class="input-group">
+                  <label for="bonus">
+                    <span class="label-icon">🎁</span>
+                    보너스 (연간)
+                  </label>
+                  <input type="number" id="bonus" value="0" min="0" class="modern-input" />
+                </div>
+
+                <div class="input-group">
+                  <label for="taxRate">
+                    <span class="label-icon">📈</span>
+                    세율 (%)
+                  </label>
+                  <input
+                    type="number"
+                    id="taxRate"
+                    value="13.5"
+                    min="0"
+                    max="100"
+                    step="0.1"
+                    class="modern-input"
+                  />
+                </div>
+              </div>
             </div>
 
-            <div class="input-group">
-              <label for="workDays">주당 근무일수</label>
-              <input type="number" id="workDays" value="5" min="1" max="7" />
-            </div>
-
-            <div class="input-group">
-              <label for="bonus">보너스 (연간)</label>
-              <input type="number" id="bonus" value="0" min="0" />
-            </div>
-
-            <div class="input-group">
-              <label for="taxRate">세율 (%)</label>
-              <input
-                type="number"
-                id="taxRate"
-                value="13.5"
-                min="0"
-                max="100"
-                step="0.1"
-              />
-            </div>
-
-            <div class="checkbox-group">
-              <label class="checkbox-label">
+            <div class="checkbox-card">
+              <label class="modern-checkbox">
                 <input type="checkbox" id="includeTax" />
                 <span class="checkmark"></span>
-                세후 금액 포함
+                <span class="checkbox-text">세후 금액 포함</span>
               </label>
             </div>
           </div>
 
            <div class="result-section">
-             <h2>실수령액</h2>
-             <div class="take-home-section">
-               <div class="take-home-item main-result">
-                 <span>연봉 실수령액</span>
-                 <span id="annualAfterTax">₩0</span>
+             <div class="section-header">
+               <h2>💳 실수령액</h2>
+               <p>세후 실제 받는 금액입니다</p>
+             </div>
+             
+             <div class="result-cards">
+               <div class="result-card main-result">
+                 <div class="result-icon">💰</div>
+                 <div class="result-content">
+                   <span class="result-label">연봉 실수령액</span>
+                   <span class="result-value" id="annualAfterTax">₩0</span>
+                 </div>
                </div>
-               <div class="take-home-item">
-                 <span>월급 실수령액</span>
-                 <span id="monthlyAfterTax">₩0</span>
+               
+               <div class="result-card">
+                 <div class="result-icon">📅</div>
+                 <div class="result-content">
+                   <span class="result-label">월급 실수령액</span>
+                   <span class="result-value" id="monthlyAfterTax">₩0</span>
+                 </div>
                </div>
-               <div class="take-home-item">
-                 <span>시급 실수령액</span>
-                 <span id="hourlyAfterTax">₩0</span>
+               
+               <div class="result-card">
+                 <div class="result-icon">⏰</div>
+                 <div class="result-content">
+                   <span class="result-label">시급 실수령액</span>
+                   <span class="result-value" id="hourlyAfterTax">₩0</span>
+                 </div>
                </div>
              </div>
            </div>
 
             <div class="deduction-section">
-              <h3>공제 내역</h3>
-              <div class="deduction-item">
-                <span>건강보험</span>
-                <span id="healthInsurance">₩0</span>
+              <div class="section-header">
+                <h3>📋 공제 내역</h3>
+                <p>각종 보험료와 세금 내역</p>
               </div>
-              <div class="deduction-item">
-                <span>국민연금</span>
-                <span id="pension">₩0</span>
-              </div>
-              <div class="deduction-item">
-                <span>고용보험</span>
-                <span id="employment">₩0</span>
-              </div>
-              <div class="deduction-item">
-                <span>산재보험</span>
-                <span id="industrialAccident">₩0</span>
-              </div>
-              <div class="deduction-item total-deduction">
-                <span>4대보험 총액</span>
-                <span id="totalInsurance">₩0</span>
-              </div>
-              <div class="deduction-item">
-                <span>소득세</span>
-                <span id="incomeTax">₩0</span>
-              </div>
-              <div class="deduction-item">
-                <span>지방소득세</span>
-                <span id="localIncomeTax">₩0</span>
-              </div>
-              <div class="deduction-item total-deduction">
-                <span>총 공제액</span>
-                <span id="totalDeduction">₩0</span>
+              
+              <div class="deduction-grid">
+                <div class="deduction-card">
+                  <div class="deduction-icon">🏥</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">건강보험</span>
+                    <span class="deduction-value" id="healthInsurance">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">👴</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">국민연금</span>
+                    <span class="deduction-value" id="pension">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">💼</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">고용보험</span>
+                    <span class="deduction-value" id="employment">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">🛡️</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">산재보험</span>
+                    <span class="deduction-value" id="industrialAccident">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card total-card">
+                  <div class="deduction-icon">📊</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">4대보험 총액</span>
+                    <span class="deduction-value" id="totalInsurance">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">📈</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">소득세</span>
+                    <span class="deduction-value" id="incomeTax">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card">
+                  <div class="deduction-icon">🏛️</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">지방소득세</span>
+                    <span class="deduction-value" id="localIncomeTax">₩0</span>
+                  </div>
+                </div>
+                
+                <div class="deduction-card total-card">
+                  <div class="deduction-icon">💸</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">총 공제액</span>
+                    <span class="deduction-value" id="totalDeduction">₩0</span>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div class="summary-section">
-              <h3>요약</h3>
-              <div class="summary-item">
-                <span>연간 총 근무시간</span>
-                <span id="totalWorkHours">0시간</span>
+              <div class="section-header">
+                <h3>📊 요약</h3>
+                <p>근무 정보 및 보너스</p>
               </div>
-              <div class="summary-item">
-                <span>연간 총 근무일수</span>
-                <span id="totalWorkDays">0일</span>
-              </div>
-              <div class="summary-item">
-                <span>보너스</span>
-                <span id="bonusAmount">₩0</span>
+              
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <div class="summary-icon">⏰</div>
+                  <div class="summary-content">
+                    <span class="summary-label">연간 총 근무시간</span>
+                    <span class="summary-value" id="totalWorkHours">0시간</span>
+                  </div>
+                </div>
+                
+                <div class="summary-card">
+                  <div class="summary-icon">📅</div>
+                  <div class="summary-content">
+                    <span class="summary-label">연간 총 근무일수</span>
+                    <span class="summary-value" id="totalWorkDays">0일</span>
+                  </div>
+                </div>
+                
+                <div class="summary-card">
+                  <div class="summary-icon">🎁</div>
+                  <div class="summary-content">
+                    <span class="summary-label">보너스</span>
+                    <span class="summary-value" id="bonusAmount">₩0</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
