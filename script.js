@@ -129,12 +129,13 @@ class SalaryCalculator {
   calculateFromAnnual(annual, hours, days, bonus, tax, isIncludeTax) {
     const annualBase = isIncludeTax ? annual / (1 - tax / 100) : annual;
     const monthly = annualBase / 12;
-    const hourly = monthly / (hours * days * 4.33); // 4.33주/월
+    const annualWorkHours = hours * 52; // 연간 총 근무시간
+    const hourly = annualBase / annualWorkHours; // 시급 = 연봉 ÷ 연간 근무시간
 
     // 한국 실수령액 계산
     const takeHomePay = SalaryUtils.calculateTakeHomePay(annualBase);
     const monthlyTakeHome = takeHomePay.monthlyTakeHome;
-    const hourlyTakeHome = monthlyTakeHome / (hours * days * 4.33);
+    const hourlyTakeHome = takeHomePay.takeHomePay / annualWorkHours; // 실수령액 시급
 
     return {
       annual: annualBase,
@@ -154,12 +155,13 @@ class SalaryCalculator {
   calculateFromMonthly(monthly, hours, days, bonus, tax, isIncludeTax) {
     const monthlyBase = isIncludeTax ? monthly / (1 - tax / 100) : monthly;
     const annual = monthlyBase * 12;
-    const hourly = monthlyBase / (hours * days * 4.33);
+    const annualWorkHours = hours * 52; // 연간 총 근무시간
+    const hourly = annual / annualWorkHours; // 시급 = 연봉 ÷ 연간 근무시간
 
     // 한국 실수령액 계산
     const takeHomePay = SalaryUtils.calculateTakeHomePay(annual);
     const monthlyTakeHome = takeHomePay.monthlyTakeHome;
-    const hourlyTakeHome = monthlyTakeHome / (hours * days * 4.33);
+    const hourlyTakeHome = takeHomePay.takeHomePay / annualWorkHours; // 실수령액 시급
 
     return {
       annual: annual,
@@ -178,13 +180,14 @@ class SalaryCalculator {
 
   calculateFromHourly(hourly, hours, days, bonus, tax, isIncludeTax) {
     const hourlyBase = isIncludeTax ? hourly / (1 - tax / 100) : hourly;
-    const monthly = hourlyBase * hours * days * 4.33;
-    const annual = monthly * 12;
+    const annualWorkHours = hours * 52; // 연간 총 근무시간
+    const annual = hourlyBase * annualWorkHours; // 연봉 = 시급 × 연간 근무시간
+    const monthly = annual / 12;
 
     // 한국 실수령액 계산
     const takeHomePay = SalaryUtils.calculateTakeHomePay(annual);
     const monthlyTakeHome = takeHomePay.monthlyTakeHome;
-    const hourlyTakeHome = monthlyTakeHome / (hours * days * 4.33);
+    const hourlyTakeHome = takeHomePay.takeHomePay / annualWorkHours; // 실수령액 시급
 
     return {
       annual: annual,
