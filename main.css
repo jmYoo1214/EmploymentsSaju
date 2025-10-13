@@ -95,14 +95,14 @@ header p {
 }
 
 .tool-card h2 {
-  color: #4a5568;
+  color: #2d3748;
   font-size: 1.8rem;
   margin-bottom: 15px;
   font-weight: 700;
 }
 
 .tool-card p {
-  color: #718096;
+  color: #4a5568;
   font-size: 1.1rem;
   margin-bottom: 20px;
   line-height: 1.5;
@@ -114,7 +114,7 @@ header p {
 
 .tool-features span {
   display: block;
-  color: #4a5568;
+  color: #2d3748;
   font-size: 0.95rem;
   margin-bottom: 5px;
   padding-left: 10px;
