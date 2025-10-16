@@ -1,0 +1,5 @@
+# ads.txt 파일
+# Google AdSense 광고 판매자 정보
+# 실제 Publisher ID로 교체하세요
+
+google.com, pub-YOUR_PUBLISHER_ID, DIRECT, f08c47fec0942fa0
