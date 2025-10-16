@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# 주요 페이지
+Allow: /main.html
+Allow: /fortune.html
+Allow: /compatibility.html
+Allow: /calorie-calculator.html
+Allow: /salary-calculator.html
+Allow: /tax-calculator.html
+Allow: /lunch-picker.html
+
+# 정적 파일
+Allow: /main.css
+Allow: /style.css
+Allow: /main.js
+Allow: /fortune.js
+Allow: /compatibility.js
+Allow: /calorie-calculator.js
+Allow: /salary-calculator.js
+Allow: /tax-calculator.js
+Allow: /lunch-picker.js
+
+# 사이트맵
+Sitemap: https://dendilstory.co.kr/sitemap.xml
+
+# 크롤링 지연 (선택사항)
+Crawl-delay: 1
+

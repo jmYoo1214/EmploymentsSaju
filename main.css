@@ -358,6 +358,266 @@ footer p {
   animation-delay: 0.5s;
 }
 
+/* Content Section Styles */
+.content-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 40px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.content-section h3 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Guide Grid */
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.guide-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.guide-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.guide-card h4 {
+  color: white;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.guide-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.guide-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.guide-card li {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.guide-card li::before {
+  content: "•";
+  color: #48bb78;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+/* Guide Content */
+.guide-content {
+  max-width: 100%;
+}
+
+.guide-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-left: 4px solid #48bb78;
+}
+
+.guide-section h4 {
+  color: white;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.guide-section h5 {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin: 20px 0 10px 0;
+  font-weight: 500;
+}
+
+.guide-section p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.guide-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.guide-section li {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.guide-section li::before {
+  content: "✓";
+  color: #48bb78;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.guide-section strong {
+  color: white;
+  font-weight: 600;
+}
+
+/* FAQ Section */
+.faq-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  margin: 40px 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.faq-section h3 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.faq-item h4 {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.faq-item p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsive Design for Content Sections */
+@media (max-width: 768px) {
+  .content-section {
+    padding: 25px;
+    margin: 25px 0;
+  }
+
+  .content-section h3 {
+    font-size: 1.6rem;
+  }
+
+  .guide-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .guide-card {
+    padding: 20px;
+  }
+
+  .guide-card h4 {
+    font-size: 1.2rem;
+  }
+
+  .guide-section {
+    padding: 20px;
+  }
+
+  .guide-section h4 {
+    font-size: 1.2rem;
+  }
+
+  .faq-section {
+    padding: 25px;
+  }
+
+  .faq-section h3 {
+    font-size: 1.6rem;
+  }
+
+  .faq-item {
+    padding: 20px;
+  }
+
+  .faq-item h4 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-section {
+    padding: 20px;
+  }
+
+  .content-section h3 {
+    font-size: 1.4rem;
+  }
+
+  .guide-card {
+    padding: 15px;
+  }
+
+  .guide-section {
+    padding: 15px;
+  }
+
+  .faq-section {
+    padding: 20px;
+  }
+
+  .faq-item {
+    padding: 15px;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
