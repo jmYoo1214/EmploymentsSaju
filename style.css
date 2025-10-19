@@ -2867,3 +2867,17 @@ footer {
     font-size: 16px;
   }
 }
+
+/* 파트너스 문구 스타일 */
+.partnership-disclosure {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.partnership-disclosure p {
+  font-size: 12px;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+}
