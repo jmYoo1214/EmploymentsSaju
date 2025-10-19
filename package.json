@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "echo 'No build step required for this project'",
+    "deploy": "echo 'Please set OPENAI_API_KEY environment variable before deployment'"
   },
   "dependencies": {
     "cors": "^2.8.5",

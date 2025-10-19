@@ -19,6 +19,77 @@ body {
   padding: 20px;
 }
 
+/* Main Layout with Left Banner */
+.main-layout {
+  display: flex;
+  gap: 15px;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.left-banner {
+  flex: 0 0 120px;
+  order: 1;
+}
+
+.main-content {
+  flex: 1;
+  order: 2;
+  min-width: 0;
+}
+
+/* Left Banner Styles */
+.left-banner {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+  width: 100%;
+}
+
+.banner-container {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.banner-label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.banner-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-content iframe {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Banner Bottom Styles */
+.right-banner-bottom {
+  display: flex;
+  justify-content: flex-end;
+  margin: 30px 0;
+}
+
+.right-banner-bottom .banner-container {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 140px;
+}
+
 /* Header Styles */
 header {
   text-align: center;
@@ -40,8 +111,8 @@ header p {
 /* Tools Grid */
 .tools-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
   margin-bottom: 50px;
 }
 
@@ -49,7 +120,7 @@ header p {
 .tool-card {
   background: white;
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -89,27 +160,27 @@ header p {
 }
 
 .tool-icon {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
   display: block;
 }
 
 .tool-card h2 {
   color: #2d3748;
-  font-size: 1.8rem;
-  margin-bottom: 15px;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
   font-weight: 700;
 }
 
 .tool-card p {
   color: #4a5568;
-  font-size: 1.1rem;
-  margin-bottom: 20px;
+  font-size: 1rem;
+  margin-bottom: 15px;
   line-height: 1.5;
 }
 
 .tool-features {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .tool-features span {
@@ -186,6 +257,15 @@ header p {
   justify-content: center;
 }
 
+.ad-section .banner-container {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 140px;
+}
+
 .ad-container {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -194,6 +274,8 @@ header p {
   border: 1px solid rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
+  max-width: 1000px;
+  width: 100%;
 }
 
 .ad-label {
@@ -209,13 +291,20 @@ header p {
 }
 
 .ad-content {
-  min-height: 90px;
+  min-height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+
+.ad-content iframe {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  height: auto;
 }
 
 .ad-placeholder {
@@ -545,6 +634,31 @@ footer p {
 
 /* Responsive Design for Content Sections */
 @media (max-width: 768px) {
+  /* 모바일에서는 왼쪽 배너를 숨김 */
+  .main-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .left-banner {
+    display: none;
+  }
+
+  .ad-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .ad-content iframe {
+    width: 100%;
+    height: 100px;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .content-section {
     padding: 25px;
     margin: 25px 0;
@@ -589,6 +703,23 @@ footer p {
 
   .faq-item h4 {
     font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  /* 태블릿에서는 왼쪽 배너를 숨김 */
+  .main-layout {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .left-banner {
+    display: none;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 

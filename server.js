@@ -22,11 +22,17 @@ app.use(express.static(path.join(__dirname)));
 
 // GPT API 연동을 위한 OpenAI 클라이언트 (선택사항)
 let openai = null;
-if (process.env.OPENAI_API_KEY) {
+if (
+  process.env.OPENAI_API_KEY &&
+  process.env.OPENAI_API_KEY !== "your_openai_api_key_here"
+) {
   const OpenAI = require("openai");
   openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
   });
+  console.log("GPT API 연동이 활성화되었습니다.");
+} else {
+  console.log("GPT API 키가 설정되지 않았습니다. 기본 운세를 사용합니다.");
 }
 
 // 운세 데이터
