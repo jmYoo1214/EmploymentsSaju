@@ -156,7 +156,7 @@ function setDefaultValues() {
 // GPT 연동 상태 확인
 async function checkGPTStatus() {
   try {
-    const response = await fetch("http://localhost:3000/api/status");
+    const response = await fetch("/api/status");
     const data = await response.json();
 
     // GPT 상태 표시
@@ -217,7 +217,7 @@ async function calculateFortune() {
 
   try {
     // 서버 API 호출
-    const response = await fetch("http://localhost:3000/api/fortune", {
+    const response = await fetch("/api/fortune", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
