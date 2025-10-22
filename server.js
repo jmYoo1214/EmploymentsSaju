@@ -23,11 +23,16 @@ app.use(express.static(path.join(__dirname)));
 // GPT API 연동을 위한 OpenAI 클라이언트 (선택사항)
 let openai = null;
 if (process.env.OPENAI_API_KEY) {
-  const OpenAI = require("openai");
-  openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-  console.log("GPT API 연동이 활성화되었습니다.");
+  try {
+    const OpenAI = require("openai");
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    console.log("GPT API 연동이 활성화되었습니다.");
+  } catch (error) {
+    console.error("OpenAI 클라이언트 초기화 오류:", error);
+    openai = null;
+  }
 } else {
   console.log("GPT API 키가 설정되지 않았습니다. 기본 운세를 사용합니다.");
 }
@@ -291,6 +296,17 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
     }
   } catch (error) {
     console.error("GPT API 오류:", error);
+
+    // API 키 관련 오류인 경우 더 자세한 로그
+    if (error.message && error.message.includes("Bearer")) {
+      console.error("API 키 형식 오류: Bearer 토큰이 올바르지 않습니다.");
+      console.error("API 키를 확인하고 올바른 형식으로 설정해주세요.");
+    } else if (error.status === 401) {
+      console.error("API 키 인증 오류: 유효하지 않은 API 키입니다.");
+    } else if (error.status === 429) {
+      console.error("API 사용량 초과: 잠시 후 다시 시도해주세요.");
+    }
+
     return generateBasicFortune();
   }
 }
