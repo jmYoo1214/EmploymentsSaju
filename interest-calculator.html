@@ -85,21 +85,38 @@
 
             <div class="input-card">
               <div class="input-group">
-                <label for="monthlyDeposit">
+                <label for="additionalPayment">
                   <span class="label-icon">💳</span>
-                  월 추가 상환액
+                  추가 상환액
                 </label>
                 <div class="input-with-unit">
                   <input
                     type="text"
-                    id="monthlyDeposit"
-                    placeholder="매월 추가 상환할 금액"
+                    id="additionalPayment"
+                    placeholder="추가 상환할 금액"
                     value="0"
                     class="modern-input"
                     maxlength="20"
                   />
                   <span class="input-unit">원</span>
                 </div>
+              </div>
+
+              <div class="input-group">
+                <label for="additionalPaymentMonth">
+                  <span class="label-icon">📅</span>
+                  추가 상환 시점
+                </label>
+                <select id="additionalPaymentMonth" class="modern-select">
+                  <option value="0">추가 상환 없음</option>
+                  <option value="1">1개월차</option>
+                  <option value="6">6개월차</option>
+                  <option value="12">12개월차</option>
+                  <option value="24">24개월차</option>
+                  <option value="36">36개월차</option>
+                  <option value="48">48개월차</option>
+                  <option value="60">60개월차</option>
+                </select>
               </div>
 
               <div class="input-group">

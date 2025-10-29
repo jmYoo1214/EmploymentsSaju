@@ -49,7 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 숫자 입력 필드에 포맷팅 이벤트 추가
-  const numberInputs = document.querySelectorAll("#principal, #monthlyDeposit");
+  const numberInputs = document.querySelectorAll(
+    "#principal, #additionalPayment"
+  );
   numberInputs.forEach((input) => {
     // 포커스 아웃 시 포맷팅 적용
     input.addEventListener("blur", (e) => {
@@ -114,10 +116,12 @@ function calculateLoan() {
     const period = parseFloat(document.getElementById("period").value) || 0;
     // 이자 계산주기는 월 1회로 고정
     const compoundFrequency = 12;
-    const monthlyDeposit =
+    const additionalPayment =
       parseFloat(
-        removeCommas(document.getElementById("monthlyDeposit").value)
+        removeCommas(document.getElementById("additionalPayment").value)
       ) || 0;
+    const additionalPaymentMonth =
+      parseInt(document.getElementById("additionalPaymentMonth").value) || 0;
     const calculationType = document.getElementById("calculationType").value;
 
     // 디버깅용 로그
@@ -125,7 +129,8 @@ function calculateLoan() {
       principal,
       interestRate,
       period,
-      monthlyDeposit,
+      additionalPayment,
+      additionalPaymentMonth,
       calculationType,
     });
 
@@ -150,7 +155,8 @@ function calculateLoan() {
         principal,
         interestRate,
         period,
-        monthlyDeposit
+        additionalPayment,
+        additionalPaymentMonth
       );
       finalAmount = result.finalAmount;
       totalEarnings = result.totalEarnings;
@@ -164,13 +170,15 @@ function calculateLoan() {
         interestRate,
         period,
         compoundFrequency,
-        monthlyDeposit
+        additionalPayment,
+        additionalPaymentMonth
       );
       const simpleResult = calculateEqualPrincipalPayment(
         principal,
         interestRate,
         period,
-        monthlyDeposit
+        additionalPayment,
+        additionalPaymentMonth
       );
 
       finalAmount = compoundResult.finalAmount;
@@ -187,7 +195,8 @@ function calculateLoan() {
         interestRate,
         period,
         compoundFrequency,
-        monthlyDeposit
+        additionalPayment,
+        additionalPaymentMonth
       );
       finalAmount = result.finalAmount;
       totalEarnings = result.totalEarnings;
@@ -215,7 +224,8 @@ function calculateLoan() {
       interestRate,
       period,
       calculationType,
-      monthlyDeposit
+      additionalPayment,
+      additionalPaymentMonth
     );
 
     // 결과 업데이트
@@ -241,7 +251,8 @@ function calculateEqualPayment(
   annualRate,
   months,
   compoundFrequency,
-  monthlyDeposit
+  additionalPayment,
+  additionalPaymentMonth
 ) {
   const rate = annualRate / 100;
   const monthlyRate = rate / 12;
@@ -261,13 +272,17 @@ function calculateEqualPayment(
   const totalPayment = monthlyPayment * months;
   const totalInterest = totalPayment - principal;
 
-  // 월 추가 상환액은 별도로 계산 (이자 계산에 포함하지 않음)
-  let additionalPayment = 0;
-  if (monthlyDeposit > 0) {
-    additionalPayment = monthlyDeposit * months;
+  // 추가 상환액 처리 (특정 월에만 적용)
+  let totalAdditionalPayment = 0;
+  if (
+    additionalPayment > 0 &&
+    additionalPaymentMonth > 0 &&
+    additionalPaymentMonth <= months
+  ) {
+    totalAdditionalPayment = additionalPayment;
   }
 
-  const finalAmount = totalPayment + additionalPayment;
+  const finalAmount = totalPayment + totalAdditionalPayment;
   const totalInvestment = principal;
   const totalEarnings = totalInterest;
   const interestEarnings = totalInterest;
@@ -277,7 +292,8 @@ function calculateEqualPayment(
     principal,
     annualRate,
     months,
-    monthlyDeposit
+    additionalPayment,
+    additionalPaymentMonth
   );
   const compoundEffect = finalAmount - equalPrincipalResult.finalAmount;
 
@@ -296,7 +312,8 @@ function calculateEqualPrincipalPayment(
   principal,
   annualRate,
   months,
-  monthlyDeposit
+  additionalPayment,
+  additionalPaymentMonth
 ) {
   const rate = annualRate / 100;
   const monthlyRate = rate / 12;
@@ -314,13 +331,17 @@ function calculateEqualPrincipalPayment(
 
   const totalPayment = principal + totalInterest;
 
-  // 월 추가 상환액은 별도로 계산 (이자 계산에 포함하지 않음)
-  let additionalPayment = 0;
-  if (monthlyDeposit > 0) {
-    additionalPayment = monthlyDeposit * months;
+  // 추가 상환액 처리 (특정 월에만 적용)
+  let totalAdditionalPayment = 0;
+  if (
+    additionalPayment > 0 &&
+    additionalPaymentMonth > 0 &&
+    additionalPaymentMonth <= months
+  ) {
+    totalAdditionalPayment = additionalPayment;
   }
 
-  const finalAmount = totalPayment + additionalPayment;
+  const finalAmount = totalPayment + totalAdditionalPayment;
   const totalInvestment = principal;
   const totalEarnings = totalInterest;
   const interestEarnings = totalInterest;
@@ -428,7 +449,8 @@ function generateScheduleTable(
   annualRate,
   months,
   calculationType,
-  monthlyDeposit
+  additionalPayment,
+  additionalPaymentMonth
 ) {
   const scheduleTableBody = document.getElementById("scheduleTableBody");
   if (!scheduleTableBody) return;
@@ -447,8 +469,12 @@ function generateScheduleTable(
 
     for (let month = 1; month <= months; month++) {
       const monthlyInterest = remainingPrincipal * monthlyRate;
-      const monthlyPayment =
-        monthlyPrincipal + monthlyInterest + monthlyDeposit;
+      let monthlyPayment = monthlyPrincipal + monthlyInterest;
+
+      // 추가 상환액이 해당 월에 적용되는지 확인
+      if (month === additionalPaymentMonth && additionalPayment > 0) {
+        monthlyPayment += additionalPayment;
+      }
 
       totalPayment += monthlyPayment;
       totalInterest += monthlyInterest;
@@ -481,7 +507,12 @@ function generateScheduleTable(
     for (let month = 1; month <= months; month++) {
       const monthlyInterest = remainingPrincipal * monthlyRate;
       const monthlyPrincipalPayment = monthlyPayment - monthlyInterest;
-      const totalMonthlyPayment = monthlyPayment + monthlyDeposit;
+      let totalMonthlyPayment = monthlyPayment;
+
+      // 추가 상환액이 해당 월에 적용되는지 확인
+      if (month === additionalPaymentMonth && additionalPayment > 0) {
+        totalMonthlyPayment += additionalPayment;
+      }
 
       totalPayment += totalMonthlyPayment;
       totalInterest += monthlyInterest;
