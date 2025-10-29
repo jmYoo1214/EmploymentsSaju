@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>대출 이율 계산기</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4538397115317215"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="back-button" onclick="location.href='main.html'">
+          ← 직장인 놀이터로 돌아가기
+        </div>
+        <h1>🏦 대출 이율 계산기</h1>
+        <p>대출 상환금과 이자를 정확하게 계산해보세요</p>
+      </header>
+
+      <main>
+        <div class="calculator-section">
+          <div class="input-section">
+            <div class="section-header">
+              <h2>📊 계산 옵션</h2>
+              <p>대출 정보를 입력해주세요</p>
+            </div>
+
+            <div class="input-card">
+              <div class="input-group">
+                <label for="principal">
+                  <span class="label-icon">💰</span>
+                  대출 원금
+                </label>
+                <div class="input-with-unit">
+                  <input
+                    type="text"
+                    id="principal"
+                    placeholder="대출받을 원금을 입력하세요"
+                    class="modern-input"
+                    maxlength="20"
+                  />
+                  <span class="input-unit">원</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="interestRate">
+                  <span class="label-icon">📈</span>
+                  대출 이율 (%)
+                </label>
+                <input
+                  type="number"
+                  id="interestRate"
+                  placeholder="대출 이율을 입력하세요"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  class="modern-input"
+                />
+              </div>
+            </div>
+
+            <div class="input-card">
+              <div class="input-group">
+                <label for="period">
+                  <span class="label-icon">📅</span>
+                  대출 기간 (개월)
+                </label>
+                <input
+                  type="number"
+                  id="period"
+                  placeholder="대출 기간을 개월로 입력하세요"
+                  min="1"
+                  max="600"
+                  class="modern-input"
+                />
+              </div>
+            </div>
+
+            <div class="input-card">
+              <div class="input-group">
+                <label for="monthlyDeposit">
+                  <span class="label-icon">💳</span>
+                  월 추가 상환액
+                </label>
+                <div class="input-with-unit">
+                  <input
+                    type="text"
+                    id="monthlyDeposit"
+                    placeholder="매월 추가 상환할 금액"
+                    value="0"
+                    class="modern-input"
+                    maxlength="20"
+                  />
+                  <span class="input-unit">원</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="calculationType">
+                  <span class="label-icon">🎯</span>
+                  계산 유형
+                </label>
+                <select id="calculationType" class="modern-select">
+                  <option value="compound">원리금균등상환</option>
+                  <option value="simple">원금균등상환</option>
+                  <option value="comparison">상환방식 비교</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-section">
+            <div class="section-header">
+              <h2>📊 계산 결과</h2>
+              <p>대출 상환 계산 결과입니다</p>
+            </div>
+
+            <div class="result-cards">
+              <div class="result-card main-result">
+                <div class="result-icon">💰</div>
+                <div class="result-content">
+                  <span class="result-label">총 상환금액</span>
+                  <span class="result-value" id="finalAmount">₩0</span>
+                </div>
+              </div>
+
+              <div class="result-card">
+                <div class="result-icon">📈</div>
+                <div class="result-content">
+                  <span class="result-label">총 이자</span>
+                  <span class="result-value" id="totalEarnings">₩0</span>
+                </div>
+              </div>
+
+              <div class="result-card">
+                <div class="result-icon">📊</div>
+                <div class="result-content">
+                  <span class="result-label">이자율</span>
+                  <span class="result-value" id="returnRate">0%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="deduction-section">
+              <div class="section-header">
+                <h3>📋 상환 상세</h3>
+                <p>대출 상환 내역</p>
+              </div>
+
+              <div class="deduction-grid">
+                <div class="deduction-card">
+                  <div class="deduction-icon">💰</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">총 대출금</span>
+                    <span class="deduction-value" id="totalInvestment">₩0</span>
+                  </div>
+                </div>
+
+                <div class="deduction-card">
+                  <div class="deduction-icon">📈</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">이자 부담</span>
+                    <span class="deduction-value" id="interestEarnings"
+                      >₩0</span
+                    >
+                  </div>
+                </div>
+
+                <div class="deduction-card">
+                  <div class="deduction-icon">🔄</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">상환 방식 효과</span>
+                    <span class="deduction-value" id="compoundEffect">₩0</span>
+                  </div>
+                </div>
+
+                <div class="deduction-card total-card">
+                  <div class="deduction-icon">📊</div>
+                  <div class="deduction-content">
+                    <span class="deduction-label">연평균 이자율</span>
+                    <span class="deduction-value" id="annualReturn">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-section">
+              <div class="section-header">
+                <h3>📊 요약</h3>
+                <p>대출 효과 및 권장사항</p>
+              </div>
+
+              <div class="summary-grid">
+                <div class="summary-card">
+                  <div class="summary-icon">💡</div>
+                  <div class="summary-content">
+                    <span class="summary-label">상환 방식 이점</span>
+                    <span class="summary-value" id="compoundBenefit">₩0</span>
+                  </div>
+                </div>
+
+                <div class="summary-card">
+                  <div class="summary-icon">🎯</div>
+                  <div class="summary-content">
+                    <span class="summary-label">상환 완료율</span>
+                    <span class="summary-value" id="goalAchievement">0%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 월별 상환금 리스트 -->
+            <div class="schedule-section">
+              <div class="section-header">
+                <h3>📅 월별 상환금 리스트</h3>
+                <p>매월 상환 내역을 확인하세요</p>
+              </div>
+
+              <div class="schedule-controls">
+                <button id="showScheduleBtn" class="schedule-btn">
+                  상환금 리스트 보기
+                </button>
+                <button
+                  id="hideScheduleBtn"
+                  class="schedule-btn"
+                  style="display: none"
+                >
+                  상환금 리스트 숨기기
+                </button>
+              </div>
+
+              <div
+                id="scheduleTable"
+                class="schedule-table"
+                style="display: none"
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th>회차</th>
+                      <th>월상환금</th>
+                      <th>원금</th>
+                      <th>이자</th>
+                      <th>잔여원금</th>
+                    </tr>
+                  </thead>
+                  <tbody id="scheduleTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 복리 vs 단리 비교 섹션 -->
+            <div
+              class="comparison-section"
+              id="comparisonSection"
+              style="display: none"
+            >
+              <div class="section-header">
+                <h3>⚖️ 상환방식 비교</h3>
+                <p>원리금균등상환 vs 원금균등상환</p>
+              </div>
+
+              <div class="comparison-grid">
+                <div class="comparison-card">
+                  <div class="comparison-header">
+                    <div class="comparison-icon">🔄</div>
+                    <h4>원리금균등상환</h4>
+                  </div>
+                  <div class="comparison-content">
+                    <div class="comparison-item">
+                      <span class="comparison-label">총 상환금액</span>
+                      <span class="comparison-value" id="compoundFinal"
+                        >₩0</span
+                      >
+                    </div>
+                    <div class="comparison-item">
+                      <span class="comparison-label">총 이자</span>
+                      <span class="comparison-value" id="compoundEarnings"
+                        >₩0</span
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comparison-card">
+                  <div class="comparison-header">
+                    <div class="comparison-icon">📊</div>
+                    <h4>원금균등상환</h4>
+                  </div>
+                  <div class="comparison-content">
+                    <div class="comparison-item">
+                      <span class="comparison-label">총 상환금액</span>
+                      <span class="comparison-value" id="simpleFinal">₩0</span>
+                    </div>
+                    <div class="comparison-item">
+                      <span class="comparison-label">총 이자</span>
+                      <span class="comparison-value" id="simpleEarnings"
+                        >₩0</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="difference-card">
+                <div class="difference-icon">💡</div>
+                <div class="difference-content">
+                  <span class="difference-label">원금균등상환의 이점</span>
+                  <span class="difference-value" id="compoundAdvantage"
+                    >₩0</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 광고 영역 -->
+        <div class="ad-section">
+          <div class="ad-container">
+            <div class="ad-label">광고</div>
+            <div class="ad-content">
+              <!-- Google AdSense 코드가 여기에 들어갑니다 -->
+              <div class="ad-placeholder">
+                <p>728x90 배너 광고</p>
+                <small>Google AdSense</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>💡 팁: 원금균등상환은 초기 상환 부담이 크지만 총 이자가 적습니다</p>
+      </footer>
+    </div>
+
+    <script src="interest-calculator.js"></script>
+  </body>
+</html>

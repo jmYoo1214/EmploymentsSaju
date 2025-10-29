@@ -10,11 +10,11 @@
     </title>
     <meta
       name="description"
-      content="직장인을 위한 종합 도구 모음! 연봉계산기로 실수령액 확인하고, 궁합보기로 사주궁합 분석하고, 운세보기로 오늘의 운세 확인하세요. 세금계산, 칼로리계산, 점심뽑기까지 모든 직장인 도구를 한 곳에서!"
+      content="직장인을 위한 종합 도구 모음! 연봉계산기로 실수령액 확인하고, 궁합보기로 사주궁합 분석하고, 운세보기로 오늘의 운세 확인하세요. 대출계산, 칼로리계산, 점심뽑기까지 모든 직장인 도구를 한 곳에서!"
     />
     <meta
       name="keywords"
-      content="연봉계산기, 실수령액, 세금계산, 궁합보기, 사주궁합, 운세보기, 직장인도구, 급여계산, 4대보험, 소득세, 칼로리계산, 점심뽑기, 직장인놀이터, 연봉협상, 세금절약, 사주보기, 궁합분석, 건강관리, 영양가이드"
+      content="연봉계산기, 실수령액, 대출계산, 궁합보기, 사주궁합, 운세보기, 직장인도구, 급여계산, 4대보험, 대출이율, 칼로리계산, 점심뽑기, 직장인놀이터, 연봉협상, 대출상환, 사주보기, 궁합분석, 건강관리, 영양가이드"
     />
     <meta name="author" content="DendilStory" />
     <meta name="robots" content="index, follow" />
@@ -64,7 +64,7 @@
     />
     <meta
       name="twitter:description"
-      content="직장인을 위한 종합 도구 모음! 연봉계산기로 실수령액 확인하고, 궁합보기로 사주궁합 분석하고, 운세보기로 오늘의 운세 확인하세요. 세금계산, 칼로리계산, 점심뽑기까지!"
+      content="직장인을 위한 종합 도구 모음! 연봉계산기로 실수령액 확인하고, 궁합보기로 사주궁합 분석하고, 운세보기로 오늘의 운세 확인하세요. 대출계산, 칼로리계산, 점심뽑기까지!"
     />
     <meta
       name="twitter:image"
@@ -85,7 +85,7 @@
         "@type": "WebApplication",
         "name": "직장인 놀이터",
         "alternateName": "직장인 도구 모음",
-        "description": "직장인을 위한 종합 도구 모음. 연봉계산기, 궁합보기, 운세보기, 세금계산 등",
+        "description": "직장인을 위한 종합 도구 모음. 연봉계산기, 궁합보기, 운세보기, 대출계산 등",
         "url": "https://dendilstory.co.kr",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web Browser",
@@ -114,14 +114,14 @@
         "featureList": [
           "연봉계산기",
           "실수령액 계산",
-          "세금계산",
+          "대출계산",
           "궁합보기",
           "사주궁합 분석",
           "운세보기",
           "칼로리계산",
           "점심뽑기"
         ],
-        "keywords": "연봉계산기, 실수령액, 세금계산, 궁합보기, 사주궁합, 운세보기, 직장인도구, 급여계산, 4대보험, 소득세, 칼로리계산, 점심뽑기",
+        "keywords": "연봉계산기, 실수령액, 대출계산, 궁합보기, 사주궁합, 운세보기, 직장인도구, 급여계산, 4대보험, 대출이율, 칼로리계산, 점심뽑기",
         "audience": {
           "@type": "Audience",
           "audienceType": "직장인"
@@ -202,7 +202,7 @@
         <nav role="navigation" aria-label="주요 도구 메뉴">
           <ul style="display: none;">
             <li><a href="#salary-calculator">연봉 계산기</a></li>
-            <li><a href="#tax-calculator">세금 계산기</a></li>
+            <li><a href="#interest-calculator">대출 이율 계산기</a></li>
             <li><a href="#fortune">오늘의 운세</a></li>
             <li><a href="#calorie-calculator">칼로리 계산기</a></li>
             <li><a href="#lunch-picker">점심 뽑기</a></li>
@@ -259,22 +259,22 @@
             <div class="tool-button">계산하기 →</div>
             </article>
 
-            <!-- 세금 계산기 -->
+            <!-- 대출 이율 계산기 -->
             <article 
               class="tool-card" 
-              id="tax-calculator"
-              onclick="location.href='tax-calculator.html'"
+              id="interest-calculator"
+              onclick="location.href='interest-calculator.html'"
               role="button"
               tabindex="0"
-              aria-label="세금 계산기로 이동"
+              aria-label="대출 이율 계산기로 이동"
             >
-            <div class="tool-icon">🧮</div>
-            <h2>세금 계산기</h2>
-            <p>다양한 세금을 쉽게 계산하고 비교해보세요</p>
+            <div class="tool-icon">🏦</div>
+            <h2>대출 이율 계산기</h2>
+            <p>대출 상환금과 이자를 정확하게 계산해보세요</p>
             <div class="tool-features">
-              <span>• 소득세 계산</span>
-              <span>• 부가가치세</span>
-              <span>• 세금 비교</span>
+              <span>• 원리금균등상환</span>
+              <span>• 원금균등상환</span>
+              <span>• 상환방식 비교</span>
             </div>
             <div class="tool-button">계산하기 →</div>
             </article>
@@ -390,17 +390,16 @@
               </ul>
             </div>
             <div class="guide-card">
-              <h4>🧮 세금 절약 노하우</h4>
+              <h4>🏦 대출 상환 최적화</h4>
               <p>
-                직장인이라면 반드시 알아야 할 세금 절약 방법들을 소개합니다.
-                연말정산부터 각종 공제까지, 합법적인 세금 절약 방법을 체계적으로
-                정리했습니다.
+                직장인이라면 반드시 알아야 할 대출 상환 최적화 방법들을 소개합니다.
+                원리금균등상환부터 원금균등상환까지, 체계적인 대출 관리 방법을 정리했습니다.
               </p>
               <ul>
-                <li><a href="#tax-calculator">연말정산 필수 체크리스트</a></li>
-                <li>소득공제 활용법</li>
-                <li>세액공제 최적화</li>
-                <li>부가가치세 환급 방법</li>
+                <li><a href="#interest-calculator">상환 방식 선택법</a></li>
+                <li>대출 이자 절약법</li>
+                <li>조기상환 전략</li>
+                <li>대출 포트폴리오 관리</li>
               </ul>
             </div>
             <div class="guide-card">
@@ -453,10 +452,10 @@
               </p>
             </div>
             <div class="faq-item">
-              <h4>Q. 칼로리 계산기의 메뉴 데이터는 어디서 가져오나요?</h4>
+              <h4>Q. 대출 이율 계산기에서 상환 방식은 어떻게 다른가요?</h4>
               <p>
-                A. 식품의약품안전처의 식품영양성분 데이터베이스와 국내 주요
-                외식업체의 공식 영양정보를 참고하여 제작되었습니다.
+                A. 원리금균등상환은 매월 동일한 금액을 상환하지만, 원금균등상환은 매월 동일한 원금에 이자를 더한 금액을 상환합니다. 
+                원금균등상환이 총 이자가 적지만 초기 상환 부담이 큽니다.
               </p>
             </div>
           </div>
@@ -469,7 +468,7 @@
         <nav aria-label="사이트 맵">
           <ul style="display: none;">
             <li><a href="salary-calculator.html">연봉 계산기</a></li>
-            <li><a href="tax-calculator.html">세금 계산기</a></li>
+            <li><a href="interest-calculator.html">대출 이율 계산기</a></li>
             <li><a href="fortune.html">오늘의 운세</a></li>
             <li><a href="calorie-calculator.html">칼로리 계산기</a></li>
             <li><a href="lunch-picker.html">점심 뽑기</a></li>
