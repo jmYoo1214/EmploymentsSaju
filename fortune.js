@@ -16,12 +16,26 @@ const fortuneData = {
     "오늘은 휴식을 취하며 내일을 준비하는 것이 좋겠습니다.",
     "예상치 못한 좋은 소식이 있을 수 있습니다.",
   ],
+  overallSummary: [
+    "긍정적인 에너지가 넘치는 하루입니다.\n새로운 기회가 찾아올 수 있는 날이며,\n작은 노력으로 큰 성과를 얻을 수 있습니다.",
+    "새로운 기회의 문이 열리는 날입니다.\n과감한 도전과 적극적인 자세가 필요하며,\n주변 사람들의 도움을 받을 수 있는 좋은 시기입니다.",
+    "신중함과 긍정이 필요한 하루입니다.\n서두르지 말고 차근차근 진행하되,\n긍정적인 마음가짐으로 하루를 시작하세요.",
+    "휴식과 준비가 중요한 날입니다.\n오늘은 쉬어가며 내일을 위한 계획을 세우고,\n몸과 마음의 균형을 맞추는 것이 좋겠습니다.",
+    "기대 이상의 좋은 소식이 찾아올 날입니다.\n예상치 못한 기회나 좋은 인연이 있을 수 있으니,\n주변을 살펴보고 귀 기울여보세요.",
+  ],
   work: [
     "업무에서 좋은 결과를 얻을 수 있습니다.",
     "동료들과의 협력이 중요한 하루입니다.",
     "새로운 프로젝트에 도전해보세요.",
     "기존 업무를 정리하고 정리하는 것이 좋겠습니다.",
     "상사와의 대화에서 좋은 결과를 얻을 수 있습니다.",
+  ],
+  workSummary: [
+    "업무 성과가 빛나는 하루",
+    "협력과 소통이 성공의 열쇠",
+    "새로운 도전의 기회",
+    "체계적인 정리와 마무리가 필요한 날",
+    "상사와의 원활한 소통으로 발전 가능",
   ],
   money: [
     "재정 관리에 신경 쓰세요.",
@@ -30,6 +44,13 @@ const fortuneData = {
     "소비를 줄이고 절약하는 것이 좋겠습니다.",
     "재정 계획을 세우는 좋은 날입니다.",
   ],
+  moneySummary: [
+    "신중한 재정 관리가 필요한 하루",
+    "예상치 못한 수입의 기회",
+    "저축과 안정이 우선",
+    "절약과 절제로 재정 안정",
+    "미래를 위한 계획 수립의 좋은 날",
+  ],
   love: [
     "새로운 만남의 기회가 있을 수 있습니다.",
     "기존 관계에서 발전이 있을 수 있습니다.",
@@ -37,12 +58,26 @@ const fortuneData = {
     "혼자만의 시간을 갖는 것이 좋겠습니다.",
     "사랑하는 사람과의 시간을 소중히 여기세요.",
   ],
+  loveSummary: [
+    "새로운 인연의 기회가 찾아올 날",
+    "기존 관계가 한 단계 발전할 수 있는 날",
+    "솔직한 대화로 관계 개선",
+    "혼자만의 시간으로 자신을 돌아보는 날",
+    "소중한 사람과의 시간을 더욱 소중히",
+  ],
   health: [
     "충분한 휴식을 취하세요.",
     "규칙적인 운동이 도움이 될 것입니다.",
     "스트레스 관리에 신경 쓰세요.",
     "건강한 식단을 유지하세요.",
     "몸의 신호에 귀 기울이세요.",
+  ],
+  healthSummary: [
+    "충분한 휴식으로 에너지 충전",
+    "규칙적인 운동으로 건강 관리",
+    "스트레스 관리가 중요한 하루",
+    "건강한 식단으로 몸을 돌보는 날",
+    "몸의 신호에 귀 기울이며 건강 챙기기",
   ],
   advice: [
     "긍정적인 마음가짐으로 하루를 시작하세요.",
@@ -388,29 +423,37 @@ function hideLoadingState() {
 // 운세 생성
 function generateFortune() {
   const random = Math.random();
+  const overallIndex = Math.floor(random * fortuneData.overall.length);
+  const workIndex = Math.floor(random * fortuneData.work.length);
+  const moneyIndex = Math.floor(random * fortuneData.money.length);
+  const loveIndex = Math.floor(random * fortuneData.love.length);
+  const healthIndex = Math.floor(random * fortuneData.health.length);
 
   return {
     overall: {
       score: Math.floor(random * 3) + 3, // 3-5점
-      text: fortuneData.overall[
-        Math.floor(random * fortuneData.overall.length)
-      ],
+      summary: fortuneData.overallSummary[overallIndex],
+      text: fortuneData.overall[overallIndex],
     },
     work: {
       score: Math.floor(random * 3) + 3,
-      text: fortuneData.work[Math.floor(random * fortuneData.work.length)],
+      summary: fortuneData.workSummary[workIndex],
+      text: fortuneData.work[workIndex],
     },
     money: {
       score: Math.floor(random * 3) + 3,
-      text: fortuneData.money[Math.floor(random * fortuneData.money.length)],
+      summary: fortuneData.moneySummary[moneyIndex],
+      text: fortuneData.money[moneyIndex],
     },
     love: {
       score: Math.floor(random * 3) + 3,
-      text: fortuneData.love[Math.floor(random * fortuneData.love.length)],
+      summary: fortuneData.loveSummary[loveIndex],
+      text: fortuneData.love[loveIndex],
     },
     health: {
       score: Math.floor(random * 3) + 3,
-      text: fortuneData.health[Math.floor(random * fortuneData.health.length)],
+      summary: fortuneData.healthSummary[healthIndex],
+      text: fortuneData.health[healthIndex],
     },
     advice: fortuneData.advice[Math.floor(random * fortuneData.advice.length)],
     lucky: {
@@ -446,6 +489,8 @@ function displayFortune(fortune) {
   }
 
   // 운세 결과 업데이트
+  document.getElementById("overallSummary").textContent =
+    fortune.overall.summary || "오늘 하루 종합 운세";
   document.getElementById("overallScore").textContent = displayScore(
     fortune.overall.score
   );

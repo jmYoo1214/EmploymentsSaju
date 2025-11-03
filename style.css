@@ -919,11 +919,29 @@ footer {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
+.fortune-summary {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.1) 100%
+  );
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
 .fortune-score {
   font-size: 1.5rem;
   color: #fbbf24;
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
   animation: twinkle 2s infinite;
+  margin-top: 8px;
 }
 
 @keyframes twinkle {
