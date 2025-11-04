@@ -9,6 +9,61 @@ let userUUID = null;
 
 // 운세 데이터
 const fortuneData = {
+  // 점수별로 분리된 운세 데이터
+  overallByScore: {
+    5: [
+      {
+        text: "오늘은 매우 좋은 하루가 될 것입니다. 모든 일이 순조롭게 진행되며 큰 성과를 얻을 수 있습니다.",
+        summary:
+          "최고의 하루가 기다리고 있습니다.\n모든 일이 순조롭게 진행되며,\n큰 성과와 기쁨을 얻을 수 있는 날입니다.",
+      },
+      {
+        text: "예상치 못한 큰 기회가 찾아올 수 있는 날입니다. 준비된 자에게 행운이 따르니 적극적으로 행동하세요.",
+        summary:
+          "큰 기회가 찾아오는 날입니다.\n준비된 자에게 행운이 따르며,\n적극적인 행동으로 큰 성공을 얻을 수 있습니다.",
+      },
+      {
+        text: "오늘은 모든 면에서 탁월한 하루입니다. 업무, 재물, 인연 모든 것이 좋은 방향으로 흘러갑니다.",
+        summary:
+          "모든 면에서 탁월한 하루입니다.\n업무, 재물, 인연 모든 것이 좋은 방향으로 흐르며,\n완벽한 하루를 보낼 수 있습니다.",
+      },
+    ],
+    4: [
+      {
+        text: "오늘은 전반적으로 좋은 하루가 될 것 같습니다. 긍정적인 마음가짐으로 하면 좋은 결과를 얻을 수 있습니다.",
+        summary:
+          "전반적으로 좋은 하루입니다.\n긍정적인 마음가짐으로 하면,\n좋은 결과를 얻을 수 있는 날입니다.",
+      },
+      {
+        text: "새로운 기회가 찾아올 수 있는 날입니다. 주변을 살펴보고 기회를 놓치지 마세요.",
+        summary:
+          "새로운 기회가 찾아올 날입니다.\n주변을 살펴보고 기회를 포착하면,\n좋은 결과를 얻을 수 있습니다.",
+      },
+      {
+        text: "오늘은 안정적이고 평온한 하루입니다. 무리하지 말고 계획대로 진행하면 좋은 결과가 있을 것입니다.",
+        summary:
+          "안정적이고 평온한 하루입니다.\n무리하지 말고 계획대로 진행하면,\n좋은 결과를 얻을 수 있는 날입니다.",
+      },
+    ],
+    3: [
+      {
+        text: "오늘은 신중하게 행동하되 긍정적인 마음가짐을 유지하세요. 조금만 노력하면 좋은 결과를 얻을 수 있습니다.",
+        summary:
+          "신중함과 긍정이 필요한 하루입니다.\n조금만 노력하면 좋은 결과를 얻을 수 있으며,\n긍정적인 마음가짐이 중요합니다.",
+      },
+      {
+        text: "오늘은 휴식을 취하며 내일을 준비하는 것이 좋겠습니다. 무리하지 말고 차근차근 진행하세요.",
+        summary:
+          "휴식과 준비가 중요한 날입니다.\n무리하지 말고 차근차근 진행하며,\n내일을 위한 준비를 하는 것이 좋겠습니다.",
+      },
+      {
+        text: "조심스럽게 행동하되 긍정적인 마음가짐을 유지하세요. 작은 노력으로도 좋은 변화를 만들 수 있습니다.",
+        summary:
+          "신중함과 긍정이 필요한 하루입니다.\n작은 노력으로도 좋은 변화를 만들 수 있으며,\n긍정적인 마음가짐을 유지하세요.",
+      },
+    ],
+  },
+  // 기존 호환성을 위한 데이터 (하위 호환)
   overall: [
     "오늘은 전반적으로 좋은 하루가 될 것 같습니다.",
     "새로운 기회가 찾아올 수 있는 날입니다.",
@@ -423,17 +478,24 @@ function hideLoadingState() {
 // 운세 생성
 function generateFortune() {
   const random = Math.random();
-  const overallIndex = Math.floor(random * fortuneData.overall.length);
   const workIndex = Math.floor(random * fortuneData.work.length);
   const moneyIndex = Math.floor(random * fortuneData.money.length);
   const loveIndex = Math.floor(random * fortuneData.love.length);
   const healthIndex = Math.floor(random * fortuneData.health.length);
 
+  // 별점 생성 (3-5점)
+  const overallScore = Math.floor(random * 3) + 3;
+
+  // 별점에 맞는 운세 선택
+  const overallOptions = fortuneData.overallByScore[overallScore];
+  const overallSelected =
+    overallOptions[Math.floor(random * overallOptions.length)];
+
   return {
     overall: {
-      score: Math.floor(random * 3) + 3, // 3-5점
-      summary: fortuneData.overallSummary[overallIndex],
-      text: fortuneData.overall[overallIndex],
+      score: overallScore,
+      summary: overallSelected.summary,
+      text: overallSelected.text,
     },
     work: {
       score: Math.floor(random * 3) + 3,
