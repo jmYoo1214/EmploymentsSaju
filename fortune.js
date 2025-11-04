@@ -551,13 +551,19 @@ function displayFortune(fortune) {
   }
 
   // 운세 결과 업데이트
-  document.getElementById("overallSummary").textContent =
-    fortune.overall.summary || "오늘 하루 종합 운세";
-  document.getElementById("overallScore").textContent = displayScore(
-    fortune.overall.score
-  );
+  // 전체 운세: 총점 계산 및 표시
+  const totalScore =
+    fortune.overall.score +
+    fortune.work.score +
+    fortune.money.score +
+    fortune.love.score +
+    fortune.health.score;
+  document.getElementById(
+    "overallTotalScore"
+  ).textContent = `총점: ${totalScore}점`;
   document.getElementById("overallFortune").textContent = fortune.overall.text;
 
+  // 각 영역별 별점과 설명 표시
   document.getElementById("workScore").textContent = displayScore(
     fortune.work.score
   );
