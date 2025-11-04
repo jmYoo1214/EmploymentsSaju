@@ -206,6 +206,19 @@ function generateBasicFortune() {
 
   // 별점 생성 (3-5점)
   const overallScore = Math.floor(random * 3) + 3;
+  const workScore = Math.floor(random * 3) + 3;
+  const moneyScore = Math.floor(random * 3) + 3;
+  const loveScore = Math.floor(random * 3) + 3;
+  const healthScore = Math.floor(random * 3) + 3;
+
+  // 총점 계산 (100점 만점 기준)
+  // 각 점수(3-5점)를 20점 만점으로 변환하여 합산 (점수 × 4)
+  const totalScore =
+    overallScore * 4 +
+    workScore * 4 +
+    moneyScore * 4 +
+    loveScore * 4 +
+    healthScore * 4;
 
   // 별점에 맞는 운세 선택
   const overallOptions = fortuneData.overallByScore[overallScore];
@@ -213,28 +226,29 @@ function generateBasicFortune() {
     overallOptions[Math.floor(random * overallOptions.length)];
 
   return {
+    totalScore: totalScore,
     overall: {
       score: overallScore,
       summary: overallSelected.summary,
       text: overallSelected.text,
     },
     work: {
-      score: Math.floor(random * 3) + 3,
+      score: workScore,
       summary: fortuneData.workSummary[workIndex],
       text: fortuneData.work[workIndex],
     },
     money: {
-      score: Math.floor(random * 3) + 3,
+      score: moneyScore,
       summary: fortuneData.moneySummary[moneyIndex],
       text: fortuneData.money[moneyIndex],
     },
     love: {
-      score: Math.floor(random * 3) + 3,
+      score: loveScore,
       summary: fortuneData.loveSummary[loveIndex],
       text: fortuneData.love[loveIndex],
     },
     health: {
-      score: Math.floor(random * 3) + 3,
+      score: healthScore,
       summary: fortuneData.healthSummary[healthIndex],
       text: fortuneData.health[healthIndex],
     },
@@ -298,9 +312,13 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
    - 5점: 매우 긍정적이고 좋은 운세 (예: "모든 일이 순조롭게 진행", "큰 성과", "완벽한 하루")
    - 4점: 좋은 운세 (예: "전반적으로 좋은 하루", "좋은 결과", "안정적")
    - 3점: 보통/신중한 운세 (예: "신중하게 행동", "휴식과 준비", "조금만 노력")
+6. **총점 계산**: 각 영역 점수(3-5점)를 20점 만점으로 변환하여 합산하세요
+   - 각 점수 × 4 = 해당 영역 점수 (12-20점)
+   - 5개 영역 합계 = 총점 (60-100점 범위, 100점 만점)
 
 **응답 형식 (JSON만 반환):**
 {
+  "totalScore": 숫자,  // 5개 영역 점수 합계 (100점 만점 기준, 60-100점 범위)
   "overall": {
     "score": 3-5,
     "summary": "오늘 하루 전체 운세를 3줄 정도로 요약한 설명 (각 줄은 20-30자 정도). 점수에 맞는 긍정 정도로 작성",
@@ -343,7 +361,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
         {
           role: "system",
           content:
-            "당신은 전문적인 사주명리학자이자 직장인 상담사입니다. 사주 정보를 바탕으로 실용적이고 도움이 되는 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요. **중요**: 점수와 설명의 긍정 정도가 일치해야 합니다. 5점이면 매우 긍정적인 설명, 4점이면 좋은 설명, 3점이면 보통/신중한 설명을 작성하세요.",
+            "당신은 전문적인 사주명리학자이자 직장인 상담사입니다. 사주 정보를 바탕으로 실용적이고 도움이 되는 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요. **중요**: 점수와 설명의 긍정 정도가 일치해야 합니다. 5점이면 매우 긍정적인 설명, 4점이면 좋은 설명, 3점이면 보통/신중한 설명을 작성하세요. **총점 계산**: 5개 영역(overall, work, money, love, health)의 점수를 합산하여 totalScore 필드에 포함하세요.",
         },
         {
           role: "user",
@@ -380,7 +398,25 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
         ? overallOptions[Math.floor(Math.random() * overallOptions.length)]
         : null;
 
+      // 점수 계산
+      const workScore = validateScore(fortune.work?.score);
+      const moneyScore = validateScore(fortune.money?.score);
+      const loveScore = validateScore(fortune.love?.score);
+      const healthScore = validateScore(fortune.health?.score);
+
+      // 총점 계산 (100점 만점 기준)
+      // 각 점수(3-5점)를 20점 만점으로 변환하여 합산 (점수 × 4)
+      // GPT에서 제공한 총점이 있으면 사용하고, 없으면 계산
+      const totalScore =
+        fortune.totalScore ||
+        overallScore * 4 +
+          workScore * 4 +
+          moneyScore * 4 +
+          loveScore * 4 +
+          healthScore * 4;
+
       return {
+        totalScore: totalScore,
         overall: {
           score: overallScore,
           summary:
@@ -395,7 +431,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
             "오늘은 새로운 기회가 찾아올 수 있는 날입니다.",
         },
         work: {
-          score: validateScore(fortune.work?.score),
+          score: workScore,
           summary:
             fortune.work?.summary ||
             fortuneData.workSummary[
@@ -404,7 +440,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
           text: fortune.work?.text || "업무에서 좋은 결과를 얻을 수 있습니다.",
         },
         money: {
-          score: validateScore(fortune.money?.score),
+          score: moneyScore,
           summary:
             fortune.money?.summary ||
             fortuneData.moneySummary[
@@ -413,7 +449,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
           text: fortune.money?.text || "재정 관리에 신경 쓰세요.",
         },
         love: {
-          score: validateScore(fortune.love?.score),
+          score: loveScore,
           summary:
             fortune.love?.summary ||
             fortuneData.loveSummary[
@@ -422,7 +458,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
           text: fortune.love?.text || "새로운 만남의 기회가 있을 수 있습니다.",
         },
         health: {
-          score: validateScore(fortune.health?.score),
+          score: healthScore,
           summary:
             fortune.health?.summary ||
             fortuneData.healthSummary[

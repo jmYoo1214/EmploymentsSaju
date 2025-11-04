@@ -491,29 +491,44 @@ function generateFortune() {
   const overallSelected =
     overallOptions[Math.floor(random * overallOptions.length)];
 
+  const workScore = Math.floor(random * 3) + 3;
+  const moneyScore = Math.floor(random * 3) + 3;
+  const loveScore = Math.floor(random * 3) + 3;
+  const healthScore = Math.floor(random * 3) + 3;
+
+  // 총점 계산 (100점 만점 기준)
+  // 각 점수(3-5점)를 20점 만점으로 변환 (점수 × 4)
+  const totalScore =
+    overallScore * 4 +
+    workScore * 4 +
+    moneyScore * 4 +
+    loveScore * 4 +
+    healthScore * 4;
+
   return {
+    totalScore: totalScore,
     overall: {
       score: overallScore,
       summary: overallSelected.summary,
       text: overallSelected.text,
     },
     work: {
-      score: Math.floor(random * 3) + 3,
+      score: workScore,
       summary: fortuneData.workSummary[workIndex],
       text: fortuneData.work[workIndex],
     },
     money: {
-      score: Math.floor(random * 3) + 3,
+      score: moneyScore,
       summary: fortuneData.moneySummary[moneyIndex],
       text: fortuneData.money[moneyIndex],
     },
     love: {
-      score: Math.floor(random * 3) + 3,
+      score: loveScore,
       summary: fortuneData.loveSummary[loveIndex],
       text: fortuneData.love[loveIndex],
     },
     health: {
-      score: Math.floor(random * 3) + 3,
+      score: healthScore,
       summary: fortuneData.healthSummary[healthIndex],
       text: fortuneData.health[healthIndex],
     },
@@ -551,37 +566,29 @@ function displayFortune(fortune) {
   }
 
   // 운세 결과 업데이트
-  // 전체 운세: 총점 계산 및 표시
+  // 전체 운세: 총점 표시 (100점 만점 기준)
+  // 각 영역은 3-5점이므로, 20점 만점으로 변환하여 총점 계산
+  // 3점 = 12점, 4점 = 16점, 5점 = 20점 (각 점수 × 4)
+  const overallPoints = fortune.overall.score * 4; // 12-20점
+  const workPoints = fortune.work.score * 4; // 12-20점
+  const moneyPoints = fortune.money.score * 4; // 12-20점
+  const lovePoints = fortune.love.score * 4; // 12-20점
+  const healthPoints = fortune.health.score * 4; // 12-20점
+
+  // 총점 계산 (100점 만점)
   const totalScore =
-    fortune.overall.score +
-    fortune.work.score +
-    fortune.money.score +
-    fortune.love.score +
-    fortune.health.score;
+    fortune.totalScore ||
+    overallPoints + workPoints + moneyPoints + lovePoints + healthPoints;
+
   document.getElementById(
     "overallTotalScore"
-  ).textContent = `총점: ${totalScore}점`;
+  ).textContent = `총점: ${totalScore}점 / 100점`;
   document.getElementById("overallFortune").textContent = fortune.overall.text;
 
-  // 각 영역별 별점과 설명 표시
-  document.getElementById("workScore").textContent = displayScore(
-    fortune.work.score
-  );
+  // 각 영역별 설명만 표시 (별점 제거)
   document.getElementById("workFortune").textContent = fortune.work.text;
-
-  document.getElementById("moneyScore").textContent = displayScore(
-    fortune.money.score
-  );
   document.getElementById("moneyFortune").textContent = fortune.money.text;
-
-  document.getElementById("loveScore").textContent = displayScore(
-    fortune.love.score
-  );
   document.getElementById("loveFortune").textContent = fortune.love.text;
-
-  document.getElementById("healthScore").textContent = displayScore(
-    fortune.health.score
-  );
   document.getElementById("healthFortune").textContent = fortune.health.text;
 
   document.getElementById("dailyAdvice").textContent = fortune.advice;
