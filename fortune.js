@@ -598,6 +598,94 @@ function displayFortune(fortune) {
   document.getElementById("luckyDirection").textContent =
     fortune.lucky.direction;
 
+  // 새로운 필드 표시
+  // 직장운 - 시간대별 추천
+  if (fortune.work?.timeGuidance) {
+    const workTimeGuidanceEl = document.getElementById("workTimeGuidance");
+    const workTimeGuidanceTextEl = document.getElementById(
+      "workTimeGuidanceText"
+    );
+    workTimeGuidanceTextEl.textContent = fortune.work.timeGuidance;
+    workTimeGuidanceEl.style.display = "block";
+  } else {
+    document.getElementById("workTimeGuidance").style.display = "none";
+  }
+
+  // 재물운 - 추천 행동
+  if (fortune.money?.action) {
+    const moneyActionEl = document.getElementById("moneyAction");
+    const moneyActionTextEl = document.getElementById("moneyActionText");
+    moneyActionTextEl.textContent = fortune.money.action;
+    moneyActionEl.style.display = "block";
+  } else {
+    document.getElementById("moneyAction").style.display = "none";
+  }
+
+  // 연애운 - 팁
+  if (fortune.love?.tip) {
+    const loveTipEl = document.getElementById("loveTip");
+    const loveTipTextEl = document.getElementById("loveTipText");
+    loveTipTextEl.textContent = fortune.love.tip;
+    loveTipEl.style.display = "block";
+  } else {
+    document.getElementById("loveTip").style.display = "none";
+  }
+
+  // 건강운 - 주의사항
+  if (fortune.health?.caution) {
+    const healthCautionEl = document.getElementById("healthCaution");
+    const healthCautionTextEl = document.getElementById("healthCautionText");
+    healthCautionTextEl.textContent = fortune.health.caution;
+    healthCautionEl.style.display = "block";
+  } else {
+    document.getElementById("healthCaution").style.display = "none";
+  }
+
+  // 추가 정보 섹션
+  const fortuneExtraEl = document.getElementById("fortuneExtra");
+  let hasExtraInfo = false;
+
+  // 가장 좋은 시간대
+  if (fortune.bestTime) {
+    document.getElementById("bestTimeText").textContent = fortune.bestTime;
+    document.getElementById("bestTimeSection").style.display = "block";
+    hasExtraInfo = true;
+  } else {
+    document.getElementById("bestTimeSection").style.display = "none";
+  }
+
+  // 피해야 할 행동
+  if (fortune.taboos && fortune.taboos.length > 0) {
+    const taboosListEl = document.getElementById("taboosList");
+    taboosListEl.innerHTML = "";
+    fortune.taboos.forEach((taboo) => {
+      const li = document.createElement("li");
+      li.textContent = taboo;
+      taboosListEl.appendChild(li);
+    });
+    document.getElementById("taboosSection").style.display = "block";
+    hasExtraInfo = true;
+  } else {
+    document.getElementById("taboosSection").style.display = "none";
+  }
+
+  // 사주 인사이트
+  if (fortune.sajuInsight) {
+    document.getElementById("sajuInsightText").textContent =
+      fortune.sajuInsight;
+    document.getElementById("sajuInsightSection").style.display = "block";
+    hasExtraInfo = true;
+  } else {
+    document.getElementById("sajuInsightSection").style.display = "none";
+  }
+
+  // 추가 정보가 있으면 섹션 표시
+  if (hasExtraInfo) {
+    fortuneExtraEl.style.display = "block";
+  } else {
+    fortuneExtraEl.style.display = "none";
+  }
+
   // 애니메이션 효과
   animateFortuneResult();
 }

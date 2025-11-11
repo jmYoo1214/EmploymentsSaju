@@ -296,60 +296,132 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
 
     const timeName = timeNames[parseInt(birthTime)] || "알 수 없음";
 
-    const prompt = `당신은 전문적인 사주명리학자입니다. 다음 사주 정보를 바탕으로 오늘의 운세를 작성해주세요.
+    // 오늘 날짜 정보
+    const today = new Date();
+    const todayDate = today.toISOString().split("T")[0];
+    const dayOfWeek = [
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일",
+    ][today.getDay()];
+    const month = today.getMonth() + 1;
+    const season =
+      month >= 3 && month <= 5
+        ? "봄"
+        : month >= 6 && month <= 8
+        ? "여름"
+        : month >= 9 && month <= 11
+        ? "가을"
+        : "겨울";
+
+    const prompt = `당신은 30년 이상의 경력을 가진 전문 사주명리학자이자 직장인 상담 전문가입니다. 다음 정보를 바탕으로 오늘의 운세를 작성해주세요.
 
 **사주 정보:**
 - 출생일: ${birthDate} (${calendarType === "solar" ? "양력" : "음력"})
 - 출생시간: ${timeName}
 - 성별: ${gender === "male" ? "남성" : "여성"}
 
-**요청사항:**
-1. 사주 정보를 바탕으로 개인화된 운세를 작성해주세요
-2. 직장인에게 실용적이고 도움이 되는 조언을 포함해주세요
-3. 긍정적이면서도 현실적인 내용으로 작성해주세요
-4. 각 영역별로 3-5점으로 점수를 매겨주세요
-5. **중요**: 점수에 맞는 설명을 작성해주세요
-   - 5점: 매우 긍정적이고 좋은 운세 (예: "모든 일이 순조롭게 진행", "큰 성과", "완벽한 하루")
-   - 4점: 좋은 운세 (예: "전반적으로 좋은 하루", "좋은 결과", "안정적")
-   - 3점: 보통/신중한 운세 (예: "신중하게 행동", "휴식과 준비", "조금만 노력")
-6. **총점 계산**: 각 영역 점수(3-5점)를 20점 만점으로 변환하여 합산하세요
-   - 각 점수 × 4 = 해당 영역 점수 (12-20점)
-   - 5개 영역 합계 = 총점 (60-100점 범위, 100점 만점)
+**오늘 날짜 정보:**
+- 오늘 날짜: ${todayDate} (${dayOfWeek})
+- 계절: ${season}
+- 월: ${month}월
 
-**응답 형식 (JSON만 반환):**
+**사주 분석 지침:**
+1. **음양오행 분석**: 출생일과 시간을 바탕으로 일간(日干)의 오행(木火土金水)을 분석하고, 오늘 날짜와의 상생상극 관계를 고려하세요
+2. **십성 분석**: 관성(官星), 재성(財星), 인성(印星), 식상(食傷), 비겁(比劫)의 강약을 고려하여 각 영역의 운세를 판단하세요
+3. **시간대별 운세**: 출생시간(시주)과 오늘의 시간대별 에너지 흐름을 고려하여 구체적인 행동 지침을 제공하세요
+4. **계절 고려**: ${season}철의 특성과 개인의 오행이 조화를 이루는지 분석하세요
+
+**운세 작성 원칙:**
+1. **개인화**: 출생일, 출생시간, 성별을 종합적으로 고려하여 개인에게 맞는 운세를 작성하세요
+2. **실용성**: 직장인에게 즉시 활용 가능한 구체적인 행동 지침을 포함하세요
+3. **균형**: 긍정적이면서도 현실적이며, 과도한 낙관이나 비관을 피하세요
+4. **점수 일관성**: 점수와 설명의 긍정 정도가 반드시 일치해야 합니다
+   - 5점: 매우 긍정적 (예: "모든 일이 순조롭게 진행", "큰 성과", "완벽한 하루", "기회가 넘치는 날")
+   - 4점: 좋은 운세 (예: "전반적으로 좋은 하루", "좋은 결과 기대", "안정적이고 순탄한 하루")
+   - 3점: 보통/신중 (예: "신중하게 행동 필요", "휴식과 준비가 중요", "조금만 노력하면 개선")
+
+**각 영역별 작성 가이드:**
+
+1. **직장운 (work)**:
+   - 관성(리더십, 책임감)과 재성(경제적 안정)의 관계를 분석
+   - 오늘의 업무 효율성, 동료 관계, 상사와의 소통, 프로젝트 진행 상황을 구체적으로 언급
+   - 시간대별 업무 추천 (예: "오전에는 계획 수립, 오후에는 실행에 집중")
+   - 회의, 협상, 프레젠테이션 등 구체적 상황에 대한 조언 포함
+
+2. **재물운 (money)**:
+   - 재성의 강약과 오늘 날짜와의 관계 분석
+   - 저축, 투자, 소비, 계약 등 구체적 재정 행동에 대한 조언
+   - 금전 거래의 적절한 시간대 제시
+   - 재정 관리 팁 포함
+
+3. **연애운 (love)**:
+   - 정재(正財) 또는 편재(偏財)의 상태를 고려
+   - 기존 관계 발전, 새로운 만남, 소통, 갈등 해소 등 구체적 상황 언급
+   - 데이트나 만남의 적절한 시간대와 장소 제안
+   - 솔직한 대화나 로맨틱한 제안 등 행동 지침 포함
+
+4. **건강운 (health)**:
+   - 오행의 균형과 오늘의 에너지 흐름 분석
+   - 운동, 식단, 휴식, 스트레스 관리 등 구체적 건강 관리 방법
+   - 주의해야 할 신체 부위나 증상 언급
+   - 건강 검진이나 치료의 적절한 시기 제안
+
+5. **전체 운세 (overall)**:
+   - 오늘 하루 전체적인 에너지 흐름과 대운세를 종합적으로 설명
+   - 사주 이론을 바탕으로 한 개인화된 해석
+   - 오늘의 핵심 메시지와 주의사항
+
+**총점 계산:**
+- 각 영역 점수(3-5점)를 20점 만점으로 변환하여 합산
+- 각 점수 × 4 = 해당 영역 점수 (12-20점)
+- 5개 영역 합계 = 총점 (60-100점 범위, 100점 만점)
+
+**응답 형식 (JSON만 반환, 주석 없이):**
 {
-  "totalScore": 숫자,  // 5개 영역 점수 합계 (100점 만점 기준, 60-100점 범위)
+  "totalScore": 숫자,
   "overall": {
     "score": 3-5,
-    "summary": "오늘 하루 전체 운세를 3줄 정도로 요약한 설명 (각 줄은 20-30자 정도). 점수에 맞는 긍정 정도로 작성",
-    "text": "전체 운세에 대한 개인화된 설명. 점수에 맞는 긍정 정도로 작성 (5점=매우 긍정, 4점=좋음, 3점=보통/신중)"
+    "summary": "오늘 하루 전체 운세를 3줄로 요약 (각 줄 20-30자, 줄바꿈은 \\n 사용)",
+    "text": "사주 이론을 바탕으로 한 전체 운세 설명 (100-150자). 점수에 맞는 긍정 정도로 작성"
   },
   "work": {
     "score": 3-5,
-    "summary": "오늘 하루 직장운을 한 줄로 요약한 짧은 설명 (15자 이내)",
-    "text": "직장운에 대한 구체적인 조언"
+    "summary": "직장운 한 줄 요약 (15자 이내)",
+    "text": "구체적인 직장운 조언 (80-120자). 시간대별 행동 지침 포함",
+    "timeGuidance": "시간대별 추천 행동 (예: '오전: 계획 수립, 오후: 실행 집중')"
   },
   "money": {
     "score": 3-5,
-    "summary": "오늘 하루 재물운을 한 줄로 요약한 짧은 설명 (15자 이내)",
-    "text": "재물운에 대한 실용적인 조언"
+    "summary": "재물운 한 줄 요약 (15자 이내)",
+    "text": "구체적인 재물운 조언 (80-120자). 저축/투자/소비 등 구체적 행동 포함",
+    "action": "오늘 추천하는 재정 행동 (예: '중요한 계약은 오후 2-4시에')"
   },
   "love": {
     "score": 3-5,
-    "summary": "오늘 하루 연애운을 한 줄로 요약한 짧은 설명 (15자 이내)",
-    "text": "연애운에 대한 조언"
+    "summary": "연애운 한 줄 요약 (15자 이내)",
+    "text": "구체적인 연애운 조언 (80-120자). 관계 발전이나 만남에 대한 구체적 조언 포함",
+    "tip": "오늘의 연애 팁 (예: '솔직한 대화가 관계를 개선시킬 수 있는 날')"
   },
   "health": {
     "score": 3-5,
-    "summary": "오늘 하루 건강운을 한 줄로 요약한 짧은 설명 (15자 이내)",
-    "text": "건강운에 대한 조언"
+    "summary": "건강운 한 줄 요약 (15자 이내)",
+    "text": "구체적인 건강운 조언 (80-120자). 운동, 식단, 휴식 등 구체적 방법 포함",
+    "caution": "주의해야 할 건강 사항 (예: '목과 어깨 근육에 주의')"
   },
-  "advice": "오늘 하루를 위한 구체적인 조언",
+  "advice": "오늘 하루를 위한 핵심 조언 (50-80자)",
   "lucky": {
-    "color": "행운의 색깔",
+    "color": "행운의 색깔 (오행과 조화를 이루는 색)",
     "number": 숫자,
-    "direction": "행운의 방향"
-  }
+    "direction": "행운의 방향 (팔방위 중 하나)"
+  },
+  "taboos": ["피해야 할 행동 1", "피해야 할 행동 2"],
+  "bestTime": "오늘 가장 좋은 시간대 (예: '오후 2시-4시')",
+  "sajuInsight": "사주 이론 기반 오늘의 인사이트 (50-80자, 선택사항)"
 }`;
 
     console.log("GPT API 호출 중...");
@@ -361,15 +433,15 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
         {
           role: "system",
           content:
-            "당신은 전문적인 사주명리학자이자 직장인 상담사입니다. 사주 정보를 바탕으로 실용적이고 도움이 되는 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요. **중요**: 점수와 설명의 긍정 정도가 일치해야 합니다. 5점이면 매우 긍정적인 설명, 4점이면 좋은 설명, 3점이면 보통/신중한 설명을 작성하세요. **총점 계산**: 5개 영역(overall, work, money, love, health)의 점수를 합산하여 totalScore 필드에 포함하세요.",
+            "당신은 30년 이상의 경력을 가진 전문 사주명리학자이자 직장인 상담 전문가입니다. 음양오행, 십성, 일간 등 사주 이론을 깊이 이해하고 있으며, 이를 바탕으로 개인화된 운세를 제공합니다. 항상 JSON 형식으로만 응답하세요. **중요 규칙**: 1) 점수와 설명의 긍정 정도가 반드시 일치해야 합니다. 2) 사주 이론을 바탕으로 한 분석을 포함하되, 직장인에게 실용적인 조언을 제공하세요. 3) 구체적인 행동 지침과 시간대별 추천을 포함하세요. 4) 총점 계산: 5개 영역(overall, work, money, love, health)의 점수를 합산하여 totalScore 필드에 포함하세요. 5) 새로운 필드들(timeGuidance, action, tip, caution, taboos, bestTime, sajuInsight)을 적절히 포함하세요.",
         },
         {
           role: "user",
           content: prompt,
         },
       ],
-      max_tokens: 1200,
-      temperature: 0.8,
+      max_tokens: 2000,
+      temperature: 0.7,
       top_p: 0.9,
     });
 
@@ -438,6 +510,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
               Math.floor(Math.random() * fortuneData.workSummary.length)
             ],
           text: fortune.work?.text || "업무에서 좋은 결과를 얻을 수 있습니다.",
+          timeGuidance: fortune.work?.timeGuidance || null,
         },
         money: {
           score: moneyScore,
@@ -447,6 +520,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
               Math.floor(Math.random() * fortuneData.moneySummary.length)
             ],
           text: fortune.money?.text || "재정 관리에 신경 쓰세요.",
+          action: fortune.money?.action || null,
         },
         love: {
           score: loveScore,
@@ -456,6 +530,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
               Math.floor(Math.random() * fortuneData.loveSummary.length)
             ],
           text: fortune.love?.text || "새로운 만남의 기회가 있을 수 있습니다.",
+          tip: fortune.love?.tip || null,
         },
         health: {
           score: healthScore,
@@ -465,6 +540,7 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
               Math.floor(Math.random() * fortuneData.healthSummary.length)
             ],
           text: fortune.health?.text || "충분한 휴식을 취하세요.",
+          caution: fortune.health?.caution || null,
         },
         advice: fortune.advice || "긍정적인 마음가짐으로 하루를 시작하세요.",
         lucky: {
@@ -472,6 +548,9 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
           number: parseInt(fortune.lucky?.number) || 7,
           direction: fortune.lucky?.direction || "동쪽",
         },
+        taboos: fortune.taboos || [],
+        bestTime: fortune.bestTime || null,
+        sajuInsight: fortune.sajuInsight || null,
       };
     } catch (parseError) {
       console.error("GPT 응답 파싱 오류:", parseError);
@@ -498,6 +577,24 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
 // API 라우트
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "main.html"));
+});
+
+// ads.txt 파일 제공 (Google AdSense 요구사항)
+app.get("/ads.txt", (req, res) => {
+  res.type("text/plain");
+  res.sendFile(path.join(__dirname, "ads.txt"));
+});
+
+// robots.txt 파일 제공
+app.get("/robots.txt", (req, res) => {
+  res.type("text/plain");
+  res.sendFile(path.join(__dirname, "robots.txt"));
+});
+
+// sitemap.xml 파일 제공
+app.get("/sitemap.xml", (req, res) => {
+  res.type("application/xml");
+  res.sendFile(path.join(__dirname, "sitemap.xml"));
 });
 
 // GPT 연동 상태 확인 API

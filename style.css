@@ -1073,6 +1073,106 @@ footer {
   font-size: 1.1rem;
 }
 
+/* Fortune Detail Styles */
+.fortune-detail {
+  margin-top: 15px;
+  padding: 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border-left: 3px solid #667eea;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #667eea;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.detail-content {
+  color: #4a5568;
+  line-height: 1.5;
+  display: block;
+}
+
+/* Fortune Extra Section */
+.fortune-extra {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fortune-best-time,
+.fortune-taboos,
+.fortune-insight {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+
+.fortune-best-time:hover,
+.fortune-taboos:hover,
+.fortune-insight:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.fortune-best-time h3,
+.fortune-taboos h3,
+.fortune-insight h3 {
+  color: #4a5568;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fortune-best-time p {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.fortune-taboos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fortune-taboos ul li {
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid #ef4444;
+  border-radius: 5px;
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.fortune-taboos ul li:last-child {
+  margin-bottom: 0;
+}
+
+.fortune-insight p {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+  background: rgba(102, 126, 234, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+}
+
 /* Loading Spinner */
 .loading-spinner {
   width: 20px;
