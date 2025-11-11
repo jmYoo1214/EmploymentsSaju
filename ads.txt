@@ -1,6 +1,5 @@
 # ads.txt 파일
 # Google AdSense Authorized Digital Sellers
 # IAB Tech Lab ads.txt 표준 형식
-# 형식: <FIELD #1>, <FIELD #2>, <FIELD #3>, <FIELD #4>
 
 google.com, pub-4538397115317215, DIRECT, f08c47fec0942fa0
