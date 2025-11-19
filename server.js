@@ -79,28 +79,9 @@ function generateCacheKey(birthDate, birthTime, gender, calendarType, req) {
   // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
   const today = new Date().toISOString().split("T")[0];
 
-  // 클라이언트 정보 가져오기
-  // trust proxy 설정으로 req.ip가 자동으로 x-forwarded-for를 처리함
-  const clientIp =
-    req?.ip ||
-    req?.connection?.remoteAddress ||
-    req?.headers?.["x-forwarded-for"]?.split(",")[0]?.trim() ||
-    req?.headers?.["x-real-ip"] ||
-    "unknown";
-
-  const userAgent = req?.headers?.["user-agent"] || "unknown";
-
-  // User-Agent를 간단하게 변환 (너무 길면 키가 복잡해지므로)
-  // 브라우저 이름과 버전만 추출
-  const userAgentHash = userAgent
-    .substring(0, 80)
-    .replace(/\s+/g, "_")
-    .replace(/[^a-zA-Z0-9_]/g, "");
-
-  // IP 주소를 간단하게 변환 (IPv6는 축약)
-  const ipHash = clientIp.replace(/:/g, "_").substring(0, 50);
-
-  return `${birthDate}-${birthTime}-${gender}-${calendarType}-${today}-${ipHash}-${userAgentHash}`;
+  // 생년월일 기반으로만 캐싱 (같은 생년월일은 하루에 한 번만)
+  // IP/User-Agent는 매번 달라질 수 있어서 제외
+  return `${birthDate}-${birthTime}-${gender}-${calendarType}-${today}`;
 }
 
 // 캐시 정리 함수 (하루가 지난 캐시 삭제)
@@ -383,16 +364,26 @@ async function generateGPTFortune(
   );
 
   // 캐시 확인
+  console.log(`생성된 캐시 키: ${cacheKey}`);
+  console.log(`현재 캐시 크기: ${fortuneCache.size}`);
+  console.log(`캐시에 존재하는지: ${fortuneCache.has(cacheKey)}`);
+
   if (fortuneCache.has(cacheKey)) {
     console.log(
-      `캐시에서 운세 결과를 가져옵니다. (키: ${cacheKey.substring(0, 20)}...)`
+      `✅ 캐시에서 운세 결과를 가져옵니다. (키: ${cacheKey.substring(
+        0,
+        50
+      )}...)`
     );
     const cachedFortune = fortuneCache.get(cacheKey);
     return cachedFortune;
   }
 
   console.log(
-    `캐시에 없어서 GPT API를 호출합니다. (키: ${cacheKey.substring(0, 20)}...)`
+    `❌ 캐시에 없어서 GPT API를 호출합니다. (키: ${cacheKey.substring(
+      0,
+      50
+    )}...)`
   );
 
   try {
@@ -674,7 +665,10 @@ async function generateGPTFortune(
       // 캐시에 저장
       fortuneCache.set(cacheKey, result);
       console.log(
-        `운세 결과를 캐시에 저장했습니다. (캐시 크기: ${fortuneCache.size})`
+        `💾 운세 결과를 캐시에 저장했습니다. (키: ${cacheKey.substring(
+          0,
+          50
+        )}..., 캐시 크기: ${fortuneCache.size})`
       );
 
       return result;
