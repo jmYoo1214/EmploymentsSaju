@@ -1368,7 +1368,7 @@ footer {
 
 /* 광고 사이드바 */
 .ad-sidebar {
-  width: 300px;
+  width: 220px;
   padding: 20px 10px;
   display: flex;
   flex-direction: column;
@@ -1377,6 +1377,7 @@ footer {
   top: 0;
   height: 100vh;
   overflow-y: auto;
+  align-items: center;
 }
 
 .ad-left {
@@ -1391,15 +1392,55 @@ footer {
 .ad-banner {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
-  padding: 15px;
+  padding: 0;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid rgba(102, 126, 234, 0.2);
+  width: 200px;
+  height: 300px;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ad-banner:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 쿠팡 파트너스 광고 스타일 */
+.ad-banner script + script {
+  display: block;
+}
+
+/* 쿠팡 광고가 생성하는 모든 요소에 대한 스타일 */
+.ad-banner iframe,
+.ad-banner div[id*="coupang"],
+.ad-banner div[class*="coupang"],
+.ad-banner div[id*="943142"],
+.ad-banner div[id*="943143"],
+.ad-banner > div {
+  max-width: 200px !important;
+  width: 200px !important;
+  min-width: 200px !important;
+  max-height: 300px !important;
+  height: 300px !important;
+  min-height: 300px !important;
+  overflow: hidden !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+/* 쿠팡 광고 내부 요소들 */
+.ad-banner iframe {
+  border: none !important;
+  display: block !important;
 }
 
 .ad-placeholder {
@@ -1442,7 +1483,7 @@ footer {
 /* 반응형 광고 레이아웃 */
 @media (max-width: 1200px) {
   .ad-sidebar {
-    width: 250px;
+    width: 220px;
   }
 }
 
