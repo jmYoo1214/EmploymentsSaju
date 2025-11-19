@@ -25,13 +25,33 @@ let openai = null;
 if (process.env.OPENAI_API_KEY) {
   try {
     const OpenAI = require("openai");
-    // API 키에서 공백 제거 및 검증
-    const apiKey = process.env.OPENAI_API_KEY.trim();
+    // API 키에서 공백 및 특수 문자 제거
+    let apiKey = process.env.OPENAI_API_KEY.trim();
 
-    // API 키 형식 검증 (sk-로 시작해야 함)
+    // 모든 공백 문자 제거 (일반 공백, 줄바꿈, 탭 등)
+    apiKey = apiKey.replace(/\s+/g, "");
+
+    // 디버깅: API 키 정보 확인 (보안을 위해 일부만 출력)
+    console.log(`API 키 길이: ${apiKey.length}`);
+    console.log(`API 키 시작 부분: ${apiKey.substring(0, 10)}...`);
+    console.log(`API 키 첫 3글자: "${apiKey.substring(0, 3)}"`);
+    console.log(
+      `API 키 첫 3글자 코드: ${apiKey
+        .substring(0, 3)
+        .split("")
+        .map((c) => c.charCodeAt(0))
+        .join(",")}`
+    );
+    console.log(`'sk-'로 시작하는지 확인: ${apiKey.startsWith("sk-")}`);
+
+    // API 키 형식 검증 (sk- 또는 sk-proj-로 시작해야 함)
     if (!apiKey.startsWith("sk-")) {
       console.error(
         "API 키 형식 오류: OpenAI API 키는 'sk-'로 시작해야 합니다."
+      );
+      console.error(`실제 API 키 시작 부분: "${apiKey.substring(0, 15)}"`);
+      console.error(
+        `API 키 첫 글자: "${apiKey.charAt(0)}" (코드: ${apiKey.charCodeAt(0)})`
       );
       openai = null;
     } else {
@@ -47,6 +67,40 @@ if (process.env.OPENAI_API_KEY) {
 } else {
   console.log("GPT API 키가 설정되지 않았습니다. 기본 운세를 사용합니다.");
 }
+
+// GPT 운세 캐시 (하루 단위)
+const fortuneCache = new Map();
+
+// 캐시 키 생성 함수
+function generateCacheKey(birthDate, birthTime, gender, calendarType) {
+  // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
+  const today = new Date().toISOString().split("T")[0];
+  return `${birthDate}-${birthTime}-${gender}-${calendarType}-${today}`;
+}
+
+// 캐시 정리 함수 (하루가 지난 캐시 삭제)
+function cleanExpiredCache() {
+  const today = new Date().toISOString().split("T")[0];
+  const keysToDelete = [];
+
+  for (const [key, value] of fortuneCache.entries()) {
+    // 캐시 키에서 날짜 추출 (마지막 부분)
+    const cacheDate = key.split("-").slice(-1)[0];
+    if (cacheDate !== today) {
+      keysToDelete.push(key);
+    }
+  }
+
+  keysToDelete.forEach((key) => fortuneCache.delete(key));
+  if (keysToDelete.length > 0) {
+    console.log(`만료된 캐시 ${keysToDelete.length}개 삭제됨`);
+  }
+  console.log(`현재 캐시 크기: ${fortuneCache.size}개`);
+}
+
+// 매 시간마다 캐시 정리 (자정에 정리되도록)
+setInterval(cleanExpiredCache, 60 * 60 * 1000); // 1시간마다
+cleanExpiredCache(); // 시작 시 한 번 실행
 
 // 운세 데이터
 const fortuneData = {
@@ -287,6 +341,22 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
     console.log("GPT API 키가 설정되지 않았습니다. 기본 운세를 생성합니다.");
     return generateBasicFortune();
   }
+
+  // 캐시 키 생성
+  const cacheKey = generateCacheKey(birthDate, birthTime, gender, calendarType);
+
+  // 캐시 확인
+  if (fortuneCache.has(cacheKey)) {
+    console.log(
+      `캐시에서 운세 결과를 가져옵니다. (키: ${cacheKey.substring(0, 20)}...)`
+    );
+    const cachedFortune = fortuneCache.get(cacheKey);
+    return cachedFortune;
+  }
+
+  console.log(
+    `캐시에 없어서 GPT API를 호출합니다. (키: ${cacheKey.substring(0, 20)}...)`
+  );
 
   try {
     // 12지지 시간 변환
@@ -563,6 +633,14 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
         bestTime: fortune.bestTime || null,
         sajuInsight: fortune.sajuInsight || null,
       };
+
+      // 캐시에 저장
+      fortuneCache.set(cacheKey, result);
+      console.log(
+        `운세 결과를 캐시에 저장했습니다. (캐시 크기: ${fortuneCache.size})`
+      );
+
+      return result;
     } catch (parseError) {
       console.error("GPT 응답 파싱 오류:", parseError);
       console.error("원본 응답:", response);
