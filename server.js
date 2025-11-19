@@ -6,6 +6,9 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// 프록시 뒤에서 실행될 경우 IP 주소를 올바르게 가져오기 위해 설정
+app.set("trust proxy", true);
+
 // 미들웨어
 app.use(
   cors({
@@ -72,10 +75,32 @@ if (process.env.OPENAI_API_KEY) {
 const fortuneCache = new Map();
 
 // 캐시 키 생성 함수
-function generateCacheKey(birthDate, birthTime, gender, calendarType) {
+function generateCacheKey(birthDate, birthTime, gender, calendarType, req) {
   // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
   const today = new Date().toISOString().split("T")[0];
-  return `${birthDate}-${birthTime}-${gender}-${calendarType}-${today}`;
+
+  // 클라이언트 정보 가져오기
+  // trust proxy 설정으로 req.ip가 자동으로 x-forwarded-for를 처리함
+  const clientIp =
+    req?.ip ||
+    req?.connection?.remoteAddress ||
+    req?.headers?.["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    req?.headers?.["x-real-ip"] ||
+    "unknown";
+
+  const userAgent = req?.headers?.["user-agent"] || "unknown";
+
+  // User-Agent를 간단하게 변환 (너무 길면 키가 복잡해지므로)
+  // 브라우저 이름과 버전만 추출
+  const userAgentHash = userAgent
+    .substring(0, 80)
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9_]/g, "");
+
+  // IP 주소를 간단하게 변환 (IPv6는 축약)
+  const ipHash = clientIp.replace(/:/g, "_").substring(0, 50);
+
+  return `${birthDate}-${birthTime}-${gender}-${calendarType}-${today}-${ipHash}-${userAgentHash}`;
 }
 
 // 캐시 정리 함수 (하루가 지난 캐시 삭제)
@@ -336,14 +361,26 @@ function generateBasicFortune() {
 }
 
 // GPT를 사용한 운세 생성 함수
-async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
+async function generateGPTFortune(
+  birthDate,
+  birthTime,
+  gender,
+  calendarType,
+  req
+) {
   if (!openai) {
     console.log("GPT API 키가 설정되지 않았습니다. 기본 운세를 생성합니다.");
     return generateBasicFortune();
   }
 
-  // 캐시 키 생성
-  const cacheKey = generateCacheKey(birthDate, birthTime, gender, calendarType);
+  // 캐시 키 생성 (브라우저/IP 정보 포함)
+  const cacheKey = generateCacheKey(
+    birthDate,
+    birthTime,
+    gender,
+    calendarType,
+    req
+  );
 
   // 캐시 확인
   if (fortuneCache.has(cacheKey)) {
@@ -730,7 +767,8 @@ app.post("/api/fortune", async (req, res) => {
           birthDate,
           birthTime,
           gender,
-          calendarType
+          calendarType,
+          req
         );
         usedGPT = true;
       } catch (error) {
