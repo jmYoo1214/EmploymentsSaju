@@ -25,10 +25,21 @@ let openai = null;
 if (process.env.OPENAI_API_KEY) {
   try {
     const OpenAI = require("openai");
-    openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    console.log("GPT API 연동이 활성화되었습니다.");
+    // API 키에서 공백 제거 및 검증
+    const apiKey = process.env.OPENAI_API_KEY.trim();
+
+    // API 키 형식 검증 (sk-로 시작해야 함)
+    if (!apiKey.startsWith("sk-")) {
+      console.error(
+        "API 키 형식 오류: OpenAI API 키는 'sk-'로 시작해야 합니다."
+      );
+      openai = null;
+    } else {
+      openai = new OpenAI({
+        apiKey: apiKey,
+      });
+      console.log("GPT API 연동이 활성화되었습니다.");
+    }
   } catch (error) {
     console.error("OpenAI 클라이언트 초기화 오류:", error);
     openai = null;
@@ -559,17 +570,23 @@ async function generateGPTFortune(birthDate, birthTime, gender, calendarType) {
     }
   } catch (error) {
     console.error("GPT API 오류:", error);
+    console.error("에러 타입:", error.constructor.name);
+    console.error("에러 메시지:", error.message);
 
     // API 키 관련 오류인 경우 더 자세한 로그
     if (error.message && error.message.includes("Bearer")) {
       console.error("API 키 형식 오류: Bearer 토큰이 올바르지 않습니다.");
       console.error("API 키를 확인하고 올바른 형식으로 설정해주세요.");
+      console.error("API 키는 'sk-'로 시작해야 하며 공백이 없어야 합니다.");
     } else if (error.status === 401) {
       console.error("API 키 인증 오류: 유효하지 않은 API 키입니다.");
     } else if (error.status === 429) {
       console.error("API 사용량 초과: 잠시 후 다시 시도해주세요.");
+    } else if (error.cause) {
+      console.error("연결 오류:", error.cause.message);
     }
 
+    console.log("기본 운세로 폴백합니다.");
     return generateBasicFortune();
   }
 }
@@ -627,21 +644,34 @@ app.post("/api/fortune", async (req, res) => {
     }
 
     let fortune;
+    let usedGPT = false;
 
     if (useGPT && openai) {
-      fortune = await generateGPTFortune(
-        birthDate,
-        birthTime,
-        gender,
-        calendarType
-      );
+      try {
+        fortune = await generateGPTFortune(
+          birthDate,
+          birthTime,
+          gender,
+          calendarType
+        );
+        usedGPT = true;
+      } catch (error) {
+        console.error("GPT 운세 생성 실패, 기본 운세로 폴백:", error);
+        fortune = generateBasicFortune();
+        usedGPT = false;
+      }
     } else {
+      if (useGPT && !openai) {
+        console.log("GPT API가 비활성화되어 있습니다. 기본 운세를 사용합니다.");
+      }
       fortune = generateBasicFortune();
+      usedGPT = false;
     }
 
     res.json({
       success: true,
       fortune: fortune,
+      usedGPT: usedGPT,
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
