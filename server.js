@@ -466,14 +466,20 @@ JSON만 반환:
     const response = completion.choices[0].message.content;
     const endTime = Date.now();
 
-    console.log(`GPT API 응답 완료 (${endTime - startTime}ms)`);
+    console.log(`✅ GPT API 응답 완료 (${endTime - startTime}ms)`);
     console.log(`사용된 토큰: ${completion.usage?.total_tokens || "N/A"}`);
+    console.log(`응답 길이: ${response?.length || 0}자`);
+    console.log(`응답 미리보기: ${response?.substring(0, 100) || "없음"}...`);
 
     // JSON 파싱 시도
     try {
       // 응답에서 JSON 부분만 추출
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       const jsonString = jsonMatch ? jsonMatch[0] : response;
+
+      if (!jsonString) {
+        throw new Error("JSON 응답을 찾을 수 없습니다.");
+      }
 
       const fortune = JSON.parse(jsonString);
 
@@ -571,22 +577,37 @@ JSON만 반환:
         sajuInsight: fortune.sajuInsight || null,
       };
 
-      // 캐시에 저장
-      fortuneCache.set(cacheKey, result);
-      console.log(
-        `💾 캐시 저장 완료! (키: ${cacheKey}, 캐시 크기: ${fortuneCache.size})`
-      );
+      // 캐시에 저장 (result가 유효한 경우에만)
+      try {
+        if (result && typeof result === "object" && result.totalScore) {
+          fortuneCache.set(cacheKey, result);
+          console.log(
+            `💾 캐시 저장 완료! (키: ${cacheKey}, 캐시 크기: ${fortuneCache.size}, totalScore: ${result.totalScore})`
+          );
+        } else {
+          console.error(`❌ 캐시 저장 실패: result가 유효하지 않습니다.`, {
+            hasResult: !!result,
+            isObject: typeof result === "object",
+            hasTotalScore: result?.totalScore,
+            resultKeys: result ? Object.keys(result) : [],
+          });
+        }
+      } catch (cacheError) {
+        console.error(`❌ 캐시 저장 중 에러 발생:`, cacheError);
+      }
 
       return result;
     } catch (parseError) {
       console.error("GPT 응답 파싱 오류:", parseError);
       console.error("원본 응답:", response);
+      console.error(`❌ 파싱 에러로 인해 캐시 저장하지 않음 (키: ${cacheKey})`);
       return generateBasicFortune();
     }
   } catch (error) {
     console.error("GPT API 오류:", error);
     console.error("에러 타입:", error.constructor.name);
     console.error("에러 메시지:", error.message);
+    console.error(`❌ API 에러로 인해 캐시 저장하지 않음 (키: ${cacheKey})`);
 
     // API 키 관련 오류인 경우 더 자세한 로그
     if (error.message && error.message.includes("Bearer")) {
