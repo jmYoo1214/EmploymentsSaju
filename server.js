@@ -74,10 +74,20 @@ if (process.env.OPENAI_API_KEY) {
 // GPT 운세 캐시 (하루 단위)
 const fortuneCache = new Map();
 
+// 한국 시간대(KST) 기준 날짜 가져오기 헬퍼 함수
+function getKSTDate() {
+  const now = new Date();
+  const kstOffset = 9 * 60; // UTC+9 (분 단위)
+  const kstTime = new Date(
+    now.getTime() + (kstOffset - now.getTimezoneOffset()) * 60000
+  );
+  return kstTime.toISOString().split("T")[0];
+}
+
 // 캐시 키 생성 함수
 function generateCacheKey(birthDate, birthTime, gender, calendarType, req) {
-  // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
-  const today = new Date().toISOString().split("T")[0];
+  // 한국 시간대(KST, UTC+9) 기준으로 오늘 날짜를 가져옴
+  const today = getKSTDate();
 
   // 생년월일 기반으로만 캐싱 (같은 생년월일은 하루에 한 번만)
   // IP/User-Agent는 매번 달라질 수 있어서 제외
@@ -86,7 +96,7 @@ function generateCacheKey(birthDate, birthTime, gender, calendarType, req) {
 
 // 캐시 정리 함수 (하루가 지난 캐시 삭제)
 function cleanExpiredCache() {
-  const today = new Date().toISOString().split("T")[0];
+  const today = getKSTDate();
   const keysToDelete = [];
 
   for (const [key, value] of fortuneCache.entries()) {
@@ -393,9 +403,14 @@ async function generateGPTFortune(
 
     const timeName = timeNames[parseInt(birthTime)] || "알 수 없음";
 
-    // 오늘 날짜 정보
-    const today = new Date();
-    const todayDate = today.toISOString().split("T")[0];
+    // 오늘 날짜 정보 (한국 시간대 기준)
+    const todayDate = getKSTDate();
+    // 한국 시간대 기준으로 날짜 객체 생성
+    const now = new Date();
+    const kstOffset = 9 * 60; // UTC+9 (분 단위)
+    const kstTime = new Date(
+      now.getTime() + (kstOffset - now.getTimezoneOffset()) * 60000
+    );
     const dayOfWeek = [
       "일요일",
       "월요일",
@@ -404,8 +419,8 @@ async function generateGPTFortune(
       "목요일",
       "금요일",
       "토요일",
-    ][today.getDay()];
-    const month = today.getMonth() + 1;
+    ][kstTime.getUTCDay()];
+    const month = kstTime.getUTCMonth() + 1;
     const season =
       month >= 3 && month <= 5
         ? "봄"
